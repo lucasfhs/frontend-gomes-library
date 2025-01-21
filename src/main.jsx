@@ -8,6 +8,8 @@ import ErrorPage from "./routes/ErrorPage.jsx";
 import ContactDetails from "./routes/ContactDetails.jsx";
 import Login from "./pages/Login.jsx";
 import Cadastro from "./pages/Cadastro.jsx";
+import UserMainPage from "./pages/UserMainPage.jsx";
+import UserLoanHistory from "./pages/UserLoanHistory.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
   {
     path: "/cadastro",
     element: <Cadastro></Cadastro>,
+  },
+  {
+    path: "/user",
+    element: <UserMainPage></UserMainPage>,
+  },
+  {
+    path: "/loan",
+    element: <UserLoanHistory></UserLoanHistory>,
   },
 ]);
 createRoot(document.getElementById("root")).render(

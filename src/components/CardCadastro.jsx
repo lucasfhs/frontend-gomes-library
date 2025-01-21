@@ -94,7 +94,7 @@ function CardCadastro() {
           type="submit"
           className="w-full py-2 mt-4 bg-spring-green text-rich-black text-xl font-bold rounded-lg hover:bg-india-green transition"
         >
-          START
+          Enviar
         </button>
       </form>
     </div>
