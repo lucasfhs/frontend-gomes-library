@@ -8,15 +8,16 @@ function Login() {
     <div className="flex flex-col min-h-screen">
       <Header></Header>
       {/* Main Content */}
-      <div className="flex-grow">
-        <h1 className="text-center text-4xl p-4 font-thin">Login</h1>
+      <div className="flex flex-col items-center  justify-center flex-grow">
+        <h1 className="text-center text-4xl p-4 font-thin">Faça Seu Login</h1>
         <div className="container mx-auto">
           <CardLogin></CardLogin>
         </div>
       </div>
-
-      {/* Footer */}
-      <Footer />
+      <div class="mt-10">
+        {/* Footer */}
+        <Footer />
+      </div>
     </div>
   );
 }
