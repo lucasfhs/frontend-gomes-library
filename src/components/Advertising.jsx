@@ -1,5 +1,6 @@
 import React from "react";
-
+import Lottie from "lottie-react";
+import animationData from "../assets/animation/LivroAnimacao.json";
 function Advertising() {
   return (
     <div className="bg-gray-800 text-white h-full flex flex-col justify-center items-center p-6 sm:p-12">
@@ -10,8 +11,12 @@ function Advertising() {
       </h2>
 
       {/* Espaço reservado para a animação */}
-      <div className="w-full max-w-md h-64 sm:h-80 bg-gray-700 rounded-lg flex items-center justify-center shadow-lg">
-        <p className="text-gray-400 italic">Animação de um livro em breve...</p>
+      <div className="w-full max-w-md h-64 sm:h-80 rounded-lg flex items-center justify-center ">
+        <Lottie
+          animationData={animationData}
+          loop={true}
+          style={{ width: "100%", height: "100%" }}
+        ></Lottie>
       </div>
     </div>
   );
