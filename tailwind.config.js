@@ -12,6 +12,8 @@ export default {
       fontFamily: {
         playwrite: ['"Playwrite VN"', "sans-serif"], // Fonte Playwrite VN
         publicSans: ['"Public Sans"', "sans-serif"], // Fonte Public Sans
+        chakraPetch: ['"Chakra Petch"', "sans-serif"], // Fonte Chakra Petch
+        deliusSwashCaps: ['"Delius Swash Caps"', "cursive"], // Fonte Delius Swash Caps
       },
     },
   },
