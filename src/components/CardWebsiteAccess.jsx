@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 function CardWebsiteAccess() {
   return (
     <div className="h-full flex p-4 sm:p-14 justify-center items-center bg-gray-800">
@@ -11,12 +11,16 @@ function CardWebsiteAccess() {
 
         {/* Botões */}
         <div className="flex flex-col gap-4 w-full">
-          <button className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg shadow-md transition-all duration-200">
-            Cliente
-          </button>
-          <button className="w-full bg-green-500 hover:bg-green-600 text-white text-lg py-3 rounded-lg shadow-md transition-all duration-200">
-            Funcionário
-          </button>
+          <Link to="/loginUser">
+            <button className="w-full bg-green-600 hover:bg-green-700 text-white text-lg py-3 rounded-lg shadow-md transition-all duration-200">
+              Cliente
+            </button>
+          </Link>
+          <Link to="/loginAdmin">
+            <button className="w-full bg-green-500 hover:bg-green-600 text-white text-lg py-3 rounded-lg shadow-md transition-all duration-200">
+              Funcionário
+            </button>
+          </Link>
         </div>
       </div>
     </div>

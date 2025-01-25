@@ -6,7 +6,8 @@ import Home from "./routes/Home.jsx";
 import Contact from "./routes/Contact.jsx";
 import ErrorPage from "./routes/ErrorPage.jsx";
 import ContactDetails from "./routes/ContactDetails.jsx";
-import Login from "./pages/Login.jsx";
+import LoginUser from "./pages/LoginUser.jsx";
+import LoginAdmin from "./pages/LoginAdmin.jsx";
 import Cadastro from "./pages/Cadastro.jsx";
 import UserMainPage from "./pages/UserMainPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
@@ -33,8 +34,12 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <Login></Login>,
+    path: "/loginUser",
+    element: <LoginUser></LoginUser>,
+  },
+  {
+    path: "/loginAdmin",
+    element: <LoginAdmin></LoginAdmin>,
   },
   {
     path: "/cadastro",

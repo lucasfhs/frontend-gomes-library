@@ -10,7 +10,7 @@ function Login() {
       {/* Main Content */}
       <div className="flex flex-col items-center bg-gray-800 justify-center flex-grow pt-2 pb-10">
         <h1 className="text-center text-4xl py-6 text-white font-publicSans font-thin">
-          Faça seu Login
+          Bem vindo(a) usuário
         </h1>
         <div className="container mx-auto">
           <CardLoginUser></CardLoginUser>
