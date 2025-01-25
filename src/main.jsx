@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import Cadastro from "./pages/Cadastro.jsx";
 import UserMainPage from "./pages/UserMainPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/loan",
     element: <UserLoanHistory></UserLoanHistory>,
+  },
+  {
+    path: "/home",
+    element: <LandingPage></LandingPage>,
   },
 ]);
 createRoot(document.getElementById("root")).render(
