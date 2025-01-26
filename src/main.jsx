@@ -11,6 +11,7 @@ import LoginAdmin from "./pages/LoginAdmin.jsx";
 import RegisterUser from "./pages/RegisterUser.jsx";
 import RegisterAdmin from "./pages/RegisterAdmin.jsx";
 import UserMainPage from "./pages/UserMainPage.jsx";
+import AdminMainPage from "./pages/AdminMainPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 // const router = createBrowserRouter([
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <UserMainPage></UserMainPage>,
+  },
+  {
+    path: "/admin",
+    element: <AdminMainPage></AdminMainPage>,
   },
   {
     path: "/loan",
