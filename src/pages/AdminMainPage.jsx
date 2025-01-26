@@ -1,11 +1,11 @@
 import NavBarAdmin from "../components/NavBarAdmin";
-import CardLivro from "../components/CardLivro";
+import AdminPage from "../components/AdminPage";
 import Footer from "../components/Footer";
 function AdminMainPage() {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       <NavBarAdmin></NavBarAdmin>
-      <CardLivro></CardLivro>
+      <AdminPage></AdminPage>
       {/* Footer */}
       <Footer />
     </div>
