@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 function CardLoginUser() {
   return (
     <div className="bg-spring-green shadow-lg border-2 border-green-500  p-10 max-w-lg mx-auto aspect-[4/3] flex flex-col gap-8  font-chakraPetch justify-center rounded-md">
-      <form action="" class="flex flex-col gap-3">
+      <form action="" className="flex flex-col gap-3">
         <label className="text-2xl">CPF</label>
         <input
           type="text"
@@ -13,7 +14,9 @@ function CardLoginUser() {
           className="bg-white rounded-lg block w-full border  border-black"
         />
         <div className="flex items-center justify-between mt-6">
-          <button className="underline text-sm">Não possuo cadastro</button>
+          <Link to="/registerUser">
+            <button className="underline text-sm">Não possuo cadastro</button>
+          </Link>
           <button className="underline text-sm">Preciso de ajuda</button>
         </div>
       </form>

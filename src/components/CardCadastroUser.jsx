@@ -1,4 +1,4 @@
-function CardCadastro() {
+function CardCadastroUser() {
   return (
     <div className="bg-white p-10 shadow-md rounded-lg max-w-lg mx-auto border-2 border-rich-black">
       <h2 className="text-center text-3xl font-bold text-black mb-6">
@@ -101,4 +101,4 @@ function CardCadastro() {
   );
 }
 
-export default CardCadastro;
+export default CardCadastroUser;

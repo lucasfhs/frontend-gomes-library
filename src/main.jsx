@@ -8,7 +8,8 @@ import ErrorPage from "./routes/ErrorPage.jsx";
 import ContactDetails from "./routes/ContactDetails.jsx";
 import LoginUser from "./pages/LoginUser.jsx";
 import LoginAdmin from "./pages/LoginAdmin.jsx";
-import Cadastro from "./pages/Cadastro.jsx";
+import RegisterUser from "./pages/RegisterUser.jsx";
+import RegisterAdmin from "./pages/RegisterAdmin.jsx";
 import UserMainPage from "./pages/UserMainPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
@@ -42,8 +43,12 @@ const router = createBrowserRouter([
     element: <LoginAdmin></LoginAdmin>,
   },
   {
-    path: "/cadastro",
-    element: <Cadastro></Cadastro>,
+    path: "/registerUser",
+    element: <RegisterUser></RegisterUser>,
+  },
+  {
+    path: "/registerAdmin",
+    element: <RegisterAdmin></RegisterAdmin>,
   },
   {
     path: "/user",
