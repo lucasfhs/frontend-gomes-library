@@ -1,11 +1,12 @@
 import NavBarAdmin from "../components/NavBarAdmin";
-import AdminPage from "../components/AdminPage";
 import Footer from "../components/Footer";
+import { Outlet } from "react-router-dom";
 function AdminMainPage() {
   return (
     <div className="flex flex-col min-h-screen justify-between">
       <NavBarAdmin></NavBarAdmin>
-      <AdminPage></AdminPage>
+
+      <Outlet></Outlet>
       {/* Footer */}
       <Footer />
     </div>
