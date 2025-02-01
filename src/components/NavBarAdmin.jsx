@@ -1,6 +1,6 @@
 import { BookCheck, User, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 function NavBarAdmin() {
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -32,18 +32,30 @@ function NavBarAdmin() {
           menuAberto ? "block" : "hidden"
         } mt-4 md:mt-0 md:flex md:items-center md:gap-6 font-semibold text-rich-black text-lg`}
       >
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        <Link
+          to="/admin/book"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Livros
-        </button>
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        </Link>
+        <Link
+          to="/admin/loan"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Empréstimo
-        </button>
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        </Link>
+        <Link
+          to="/admin/library"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Biblioteca
-        </button>
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        </Link>
+        <Link
+          to="/admin/book-library"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Livro em Dada Biblioteca
-        </button>
+        </Link>
       </div>
 
       {/* Usuário e Logout */}
@@ -55,12 +67,15 @@ function NavBarAdmin() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <User size={24} />
-            <span>Obi Wan Kenobi</span>
+            <span>Admin</span>
           </div>
-          <button className="flex items-center gap-2 font-semibold hover:text-india-green transition">
+          <Link
+            to="/home"
+            className="flex items-center gap-2 font-semibold hover:text-india-green transition"
+          >
             <LogOut size={24} />
             Deslogar
-          </button>
+          </Link>
         </div>
       </div>
     </nav>

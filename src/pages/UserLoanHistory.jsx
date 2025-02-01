@@ -20,7 +20,7 @@ const loans = [
 ];
 function UserLoanHistory() {
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col  items-center justify-center">
       <LoanList loans={loans}></LoanList>
       {/* Footer */}
     </div>

@@ -38,7 +38,7 @@ function UserProfileUpdate() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-gray-800 border-2 border-spring-green rounded-lg p-6 mt-8 shadow-lg">
+    <div className="max-w-3xl mx-auto bg-gray-800 border-2 border-spring-green rounded-lg p-6 mt-8 mb-8 shadow-lg">
       <h2 className="text-spring-green text-2xl font-bold mb-6 text-center">
         Atualizar Dados Cadastrais
       </h2>

@@ -1,6 +1,6 @@
 import { BookCheck, User, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
-
+import { Link } from "react-router-dom";
 function NavBarUser() {
   const [menuAberto, setMenuAberto] = useState(false);
 
@@ -32,12 +32,18 @@ function NavBarUser() {
           menuAberto ? "block" : "hidden"
         } mt-4 md:mt-0 md:flex md:items-center md:gap-6 font-semibold text-rich-black text-lg`}
       >
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        <Link
+          to="/user/book"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Consultar Catálogo
-        </button>
-        <button className="block w-full md:w-auto text-left md:text-center hover:underline">
+        </Link>
+        <Link
+          to="/user/loan"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
           Empréstimos Ativos
-        </button>
+        </Link>
       </div>
 
       {/* Usuário e Logout */}
@@ -47,14 +53,19 @@ function NavBarUser() {
         } mt-4 md:mt-0 md:flex md:items-center md:gap-4 text-rich-black`}
       >
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <User size={24} />
-            <span>Obi Wan Kenobi</span>
-          </div>
-          <button className="flex items-center gap-2 font-semibold hover:text-india-green transition">
+          <Link to="/user/data">
+            <div className="flex items-center gap-2">
+              <User size={24} />
+              <span>Cliente</span>
+            </div>
+          </Link>
+          <Link
+            to="/home"
+            className="flex items-center gap-2 font-semibold hover:text-india-green transition"
+          >
             <LogOut size={24} />
             Deslogar
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
