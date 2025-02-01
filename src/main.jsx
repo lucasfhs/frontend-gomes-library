@@ -17,6 +17,8 @@ import LandingPage from "./pages/LandingPage.jsx";
 import AdminPageLivro from "./components/AdminPageLivro.jsx";
 import AdminMainPage from "./pages/AdminMainPage.jsx";
 import AdminPageEmprestimo from "./components/AdminPageEmprestimo.jsx";
+import AdminBibliotecaPage from "./components/AdminBibliotecaPage.jsx";
+import AdminLivroBibliotecaPage from "./components/AdminLivroBibliotecaPage.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -45,6 +47,11 @@ const router = createBrowserRouter([
     children: [
       { path: "book", element: <AdminPageLivro></AdminPageLivro> },
       { path: "loan", element: <AdminPageEmprestimo></AdminPageEmprestimo> },
+      { path: "library", element: <AdminBibliotecaPage></AdminBibliotecaPage> },
+      {
+        path: "book-library",
+        element: <AdminLivroBibliotecaPage></AdminLivroBibliotecaPage>,
+      },
     ],
   },
   {
@@ -74,10 +81,6 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <LandingPage></LandingPage>,
-  },
-  {
-    path: "/library",
-    element: <BibliotecaPage></BibliotecaPage>,
   },
 ]);
 createRoot(document.getElementById("root")).render(

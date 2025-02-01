@@ -16,6 +16,32 @@ function AdminBibliotecaPage() {
         cep: "01000-000",
       },
     },
+    {
+      id: 1,
+      nome: "Biblioteca Central",
+      telefone: "11987654321",
+      endereco: {
+        rua: "Rua A",
+        bairro: "Centro",
+        cidade: "São Paulo",
+        estado: "SP",
+        pais: "Brasil",
+        cep: "01000-000",
+      },
+    },
+    {
+      id: 1,
+      nome: "Biblioteca Central",
+      telefone: "11987654321",
+      endereco: {
+        rua: "Rua A",
+        bairro: "Centro",
+        cidade: "São Paulo",
+        estado: "SP",
+        pais: "Brasil",
+        cep: "01000-000",
+      },
+    },
   ]);
 
   const [novaBiblioteca, setNovaBiblioteca] = useState({

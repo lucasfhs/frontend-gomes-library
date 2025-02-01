@@ -1,118 +1,114 @@
 import React, { useState } from "react";
 
-function CardBibliotecaUpdate({ dado, onAlterar }) {
-  const [editando, setEditando] = useState(false);
-  const [quantidade, setQuantidade] = useState(dado.quantidadeDisponivel);
+function CardBibliotecaUpdate({ biblioteca, onAlterar, onDeletar }) {
+  const [formDados, setFormDados] = useState(biblioteca);
 
-  const handleSalvar = () => {
-    onAlterar(dado.id, { quantidadeDisponivel: quantidade });
-    setEditando(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormDados((prev) => ({
+      ...prev,
+      endereco: { ...prev.endereco, [name]: value }, // Atualiza apenas a parte do endereço
+    }));
   };
 
-  const handleIncrementar = () => {
-    setQuantidade((prev) => prev + 1);
+  const handleAlterar = () => {
+    onAlterar(biblioteca.id, formDados);
   };
 
-  const handleDecrementar = () => {
-    setQuantidade((prev) => (prev > 0 ? prev - 1 : 0));
+  const handleDeletar = () => {
+    onDeletar(biblioteca.id);
   };
 
   return (
-    <div className="bg-gray-900 p-4 rounded-md shadow-md text-white space-y-2 flex flex-col gap-4">
-      <div>
-        <div className="">
-          <label htmlFor="nomeBiblioteca" className="font-semibold">
-            Biblioteca:
-          </label>
-          <input
-            type="text"
-            name="nomeBiblioteca"
-            value={dado.nomeBiblioteca}
-            readOnly
-            className="w-full p-2 border rounded-md"
-          />
+    <div className="bg-white p-6 rounded-lg shadow-md border-2 border-rich-black flex flex-col space-y-2">
+      {/* Campos editáveis */}
+      <input
+        type="text"
+        name="nome"
+        value={formDados.nome}
+        onChange={(e) => setFormDados({ ...formDados, nome: e.target.value })}
+        className="w-full p-2 border rounded-md"
+        placeholder="Nome da Biblioteca"
+      />
 
-          <label htmlFor="idLivro" className="font-semibold">
-            ID Livro:
-          </label>
-          <input
-            type="text"
-            name="idLivro"
-            value={dado.idLivro}
-            readOnly
-            className="w-full p-2 border rounded-md"
-          />
+      <input
+        type="text"
+        name="telefone"
+        value={formDados.telefone}
+        onChange={(e) =>
+          setFormDados({ ...formDados, telefone: e.target.value })
+        }
+        className="w-full p-2 border rounded-md"
+        placeholder="Telefone (11 dígitos)"
+        maxLength="11"
+      />
 
-          <label htmlFor="idBiblioteca" className="font-semibold">
-            ID Biblioteca:
-          </label>
-          <input
-            type="text"
-            name="idBiblioteca"
-            value={dado.idBiblioteca}
-            readOnly
-            className="w-full p-2 border rounded-md"
-          />
+      {/* Endereço separado em campos */}
+      <h3 className="font-bold">Endereço</h3>
+      <input
+        type="text"
+        name="rua"
+        value={formDados.endereco.rua}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="Rua"
+      />
+      <input
+        type="text"
+        name="bairro"
+        value={formDados.endereco.bairro}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="Bairro"
+      />
+      <input
+        type="text"
+        name="cidade"
+        value={formDados.endereco.cidade}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="Cidade"
+      />
+      <input
+        type="text"
+        name="estado"
+        value={formDados.endereco.estado}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="Estado"
+      />
+      <input
+        type="text"
+        name="pais"
+        value={formDados.endereco.pais}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="País"
+      />
+      <input
+        type="text"
+        name="cep"
+        value={formDados.endereco.cep}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="CEP"
+      />
 
-          <label htmlFor="quantidadeDisponivel" className="font-semibold">
-            Quantidade Disponível:
-          </label>
-          <input
-            type="text"
-            name="quantidadeDisponivel"
-            value={dado.quantidadeDisponivel}
-            readOnly
-            className="w-full p-2 border rounded-md"
-          />
-        </div>
-      </div>
-
-      {editando ? (
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDecrementar}
-              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition"
-            >
-              -
-            </button>
-            <input
-              type="number"
-              value={quantidade}
-              min={0}
-              onChange={(e) => setQuantidade(parseInt(e.target.value, 10) || 0)}
-              className="w-20 text-center p-2 border rounded-md bg-gray-700 text-white"
-            />
-            <button
-              onClick={handleIncrementar}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700 transition"
-            >
-              +
-            </button>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={handleSalvar}
-              className="flex-1 py-2 bg-spring-green text-black font-bold rounded-md hover:bg-rich-black transition"
-            >
-              Salvar
-            </button>
-            <button
-              onClick={() => setEditando(false)}
-              className="flex-1 py-2 bg-red-500 text-white font-bold rounded-md hover:bg-red-700 transition"
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      ) : (
+      {/* Botões de Alterar e Deletar */}
+      <div className="flex space-x-2 mt-4">
         <button
-          onClick={() => setEditando(true)}
-          className="py-2 bg-spring-green text-black font-bold rounded-md hover:bg-rich-black transition"
+          onClick={handleAlterar}
+          className="py-2 px-6 bg-spring-green text-rich-black font-bold rounded-md border-2 border-rich-black hover:bg-india-green transition"
         >
           Alterar
         </button>
-      )}
+        <button
+          onClick={handleDeletar}
+          className="py-2 px-6 bg-red-500 text-white font-bold rounded-md border-2 border-red-700 hover:bg-red-700 transition"
+        >
+          Deletar
+        </button>
+      </div>
     </div>
   );
 }
