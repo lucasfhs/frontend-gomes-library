@@ -14,8 +14,9 @@ import UserMainPage from "./pages/UserMainPage.jsx";
 import BibliotecaPage from "./components/BibliotecaPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
-import AdminPage from "./components/AdminPage.jsx";
+import AdminPageLivro from "./components/AdminPageLivro.jsx";
 import AdminMainPage from "./pages/AdminMainPage.jsx";
+import AdminPageEmprestimo from "./components/AdminPageEmprestimo.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -41,7 +42,10 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminMainPage></AdminMainPage>,
     errorElement: <ErrorPage></ErrorPage>,
-    children: [{ path: "update", element: <AdminPage></AdminPage> }],
+    children: [
+      { path: "book", element: <AdminPageLivro></AdminPageLivro> },
+      { path: "loan", element: <AdminPageEmprestimo></AdminPageEmprestimo> },
+    ],
   },
   {
     path: "/loginUser",
