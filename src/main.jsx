@@ -20,6 +20,8 @@ import AdminPageEmprestimo from "./components/AdminPageEmprestimo.jsx";
 import AdminBibliotecaPage from "./components/AdminBibliotecaPage.jsx";
 import AdminLivroBibliotecaPage from "./components/AdminLivroBibliotecaPage.jsx";
 import CardLivro from "./components/CardLivro.jsx";
+import UserProfileUpdate from "./components/UserProfileUpdate.jsx";
+import ListaLivros from "./components/ListaLivros.jsx";
 // const router = createBrowserRouter([
 //   {
 //     path: "/",
@@ -61,7 +63,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       { path: "loan", element: <UserLoanHistory></UserLoanHistory> },
-      { path: "book", element: <CardLivro></CardLivro> },
+      { path: "book", element: <ListaLivros></ListaLivros> },
+      { path: "data", element: <UserProfileUpdate></UserProfileUpdate> },
     ],
   },
   {
