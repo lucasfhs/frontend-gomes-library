@@ -34,16 +34,6 @@ import ListaLivros from "./components/ListaLivros.jsx";
 // ]);
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App></App>,
-    errorElement: <ErrorPage></ErrorPage>,
-    children: [
-      { path: "contact", element: <Contact></Contact> },
-      { path: "/", element: <Home></Home> },
-      { path: "contact/:id", element: <ContactDetails></ContactDetails> },
-    ],
-  },
-  {
     path: "/admin",
     element: <AdminMainPage></AdminMainPage>,
     errorElement: <ErrorPage></ErrorPage>,
@@ -84,7 +74,7 @@ const router = createBrowserRouter([
     element: <RegisterAdmin></RegisterAdmin>,
   },
   {
-    path: "/home",
+    path: "/",
     element: <LandingPage></LandingPage>,
   },
 ]);

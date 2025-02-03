@@ -60,7 +60,7 @@ function NavBarUser() {
             </div>
           </Link>
           <Link
-            to="/home"
+            to="/"
             className="flex items-center gap-2 font-semibold hover:text-india-green transition"
           >
             <LogOut size={24} />
