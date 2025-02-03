@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function CardLoginUser() {
   const [cpfUser, setCpfUser] = useState("");
@@ -54,7 +54,9 @@ function CardLoginUser() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="flex items-center justify-between mt-6">
-          <button className="underline text-sm">Não possuo cadastro</button>
+          <Link to="/registerUser" className="underline text-sm">
+            Não possuo cadastro
+          </Link>
           <button className="underline text-sm">Preciso de ajuda</button>
         </div>
       </form>
