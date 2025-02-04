@@ -117,6 +117,7 @@ function AdminBibliotecaPage() {
   };
 
   const alterarBiblioteca = async (id, novosDados) => {
+    console.log(novosDados);
     try {
       const res = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
@@ -130,7 +131,7 @@ function AdminBibliotecaPage() {
       if (!res.ok) throw new Error("Erro ao atualizar biblioteca.");
       setBibliotecas((prev) =>
         prev.map((biblioteca) =>
-          biblioteca.id === id ? { ...biblioteca, ...novosDados } : livro
+          biblioteca.id === id ? { ...biblioteca, ...novosDados } : biblioteca
         )
       );
       showNotification("Biblioteca alterado com sucesso.", "success");
