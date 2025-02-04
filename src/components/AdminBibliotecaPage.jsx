@@ -45,20 +45,33 @@ function AdminBibliotecaPage() {
         console.log(error);
       });
   }, []);
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNovaBiblioteca((prev) => ({
-      ...prev,
-      endereco: { ...prev.endereco, [name]: value }, // Atualiza apenas a parte do endereço
-    }));
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    // Verifica se o campo alterado pertence ao endereço
+    if (name in novaBiblioteca.address) {
+      setNovaBiblioteca((prevState) => ({
+        ...prevState,
+        address: {
+          ...prevState.address,
+          [name]: value, // Atualiza a propriedade correta do endereço
+        },
+      }));
+    } else {
+      // Caso contrário, atualiza diretamente no estado principal
+      setNovaBiblioteca((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   const cadastrarBiblioteca = async (e) => {
     e.preventDefault();
     if (
-      !novaBiblioteca.nome ||
-      !novaBiblioteca.telefone ||
-      Object.values(novaBiblioteca.endereco).some((v) => !v)
+      !novaBiblioteca.name ||
+      !novaBiblioteca.phoneNumber ||
+      Object.values(novaBiblioteca.address).some((v) => !v)
     ) {
       showNotification("Preencha todos os campos", "danger");
       return;
@@ -159,21 +172,24 @@ function AdminBibliotecaPage() {
         <form className="space-y-4" onSubmit={cadastrarBiblioteca}>
           <input
             type="text"
-            name="nome"
+            name="name"
             placeholder="Nome da Biblioteca"
             value={novaBiblioteca.name}
             onChange={(e) =>
-              setNovaBiblioteca({ ...novaBiblioteca, nome: e.target.value })
+              setNovaBiblioteca({ ...novaBiblioteca, name: e.target.value })
             }
             className="w-full p-2 border rounded-md"
           />
           <input
             type="text"
-            name="telefone"
+            name="phoneNumber"
             placeholder="Telefone (11 dígitos)"
             value={novaBiblioteca.phoneNumber}
             onChange={(e) =>
-              setNovaBiblioteca({ ...novaBiblioteca, telefone: e.target.value })
+              setNovaBiblioteca({
+                ...novaBiblioteca,
+                phoneNumber: e.target.value,
+              })
             }
             className="w-full p-2 border rounded-md"
             maxLength="11"
@@ -182,7 +198,7 @@ function AdminBibliotecaPage() {
           <h3 className="text-white font-bold">Endereço</h3>
           <input
             type="text"
-            name="rua"
+            name="street"
             placeholder="Rua"
             value={novaBiblioteca.address.street}
             onChange={handleInputChange}
@@ -190,7 +206,7 @@ function AdminBibliotecaPage() {
           />
           <input
             type="text"
-            name="bairro"
+            name="neighborhood"
             placeholder="Bairro"
             value={novaBiblioteca.address.neighborhood}
             onChange={handleInputChange}
@@ -198,7 +214,7 @@ function AdminBibliotecaPage() {
           />
           <input
             type="text"
-            name="cidade"
+            name="city"
             placeholder="Cidade"
             value={novaBiblioteca.address.city}
             onChange={handleInputChange}
@@ -206,7 +222,7 @@ function AdminBibliotecaPage() {
           />
           <input
             type="text"
-            name="estado"
+            name="state"
             placeholder="Estado"
             value={novaBiblioteca.address.state}
             onChange={handleInputChange}
@@ -214,7 +230,7 @@ function AdminBibliotecaPage() {
           />
           <input
             type="text"
-            name="pais"
+            name="country"
             placeholder="País"
             value={novaBiblioteca.address.country}
             onChange={handleInputChange}
@@ -222,7 +238,7 @@ function AdminBibliotecaPage() {
           />
           <input
             type="text"
-            name="cep"
+            name="postal_code"
             placeholder="CEP"
             value={novaBiblioteca.address.postal_code}
             onChange={handleInputChange}
