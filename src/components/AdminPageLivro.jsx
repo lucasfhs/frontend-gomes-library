@@ -1,49 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardLivroUpdate from "./CardLivroUpdate";
 
 function AdminPage() {
-  const [livros, setLivros] = useState([
-    {
-      id: 1,
-      titulo: "A Revolução dos Bichos",
-      autor: "George Orwell",
-      categoria: ["Ficção"],
-      paginas: 112,
-      idioma: "Português",
-    },
-    {
-      id: 2,
-      titulo: "1984",
-      autor: "George Orwell",
-      categoria: ["Ficção"],
-      paginas: 328,
-      idioma: "Português",
-    },
-    {
-      id: 3,
-      titulo: "Brave New World",
-      autor: "Aldous Huxley",
-      categoria: ["Ficção"],
-      paginas: 288,
-      idioma: "Inglês",
-    },
-    {
-      id: 4,
-      titulo: "Fahrenheit 451",
-      autor: "Ray Bradbury",
-      categoria: ["Ficção"],
-      paginas: 158,
-      idioma: "Português",
-    },
-  ]);
-
+  const API_URL = "http://localhost:3000/book";
+  const [livros, setLivros] = useState([]);
   const [novoLivro, setNovoLivro] = useState({
-    titulo: "",
-    autor: "",
-    categoria: [],
-    paginas: "",
-    idioma: "",
+    title: "",
+    author: "",
+    category: [],
+    pages: "",
+    language: "",
   });
+
+  // 🔹 Buscar livros da API ao carregar a página
+  useEffect(() => {
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Dados recebidos da API:", data);
+        setLivros(data);
+      })
+      .catch((error) => console.error("Erro ao buscar livros:", error));
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,46 +42,84 @@ function AdminPage() {
 
   const handleCategoriaChange = (categoria) => {
     setNovoLivro((prev) => {
-      const categoriasAtuais = prev.categoria || [];
+      const categoriasAtuais = prev.category || [];
       const novaCategoria = categoriasAtuais.includes(categoria)
-        ? categoriasAtuais.filter((cat) => cat !== categoria) // Remove se já estiver selecionada
-        : [...categoriasAtuais, categoria]; // Adiciona se não estiver
+        ? categoriasAtuais.filter((cat) => cat !== categoria)
+        : [...categoriasAtuais, categoria];
 
-      return { ...prev, categoria: novaCategoria };
+      return { ...prev, category: novaCategoria };
     });
   };
 
-  const cadastrarLivro = (e) => {
+  // 🔹 Cadastrar livro na API
+  const cadastrarLivro = async (e) => {
     e.preventDefault();
     if (
-      !novoLivro.titulo ||
-      !novoLivro.autor ||
-      novoLivro.categoria.length === 0
+      !novoLivro.title ||
+      !novoLivro.author ||
+      novoLivro.category.length === 0
     ) {
       alert("Preencha todos os campos e selecione pelo menos uma categoria.");
       return;
     }
 
-    setLivros((prev) => [...prev, { ...novoLivro, id: prev.length + 1 }]);
-    setNovoLivro({
-      titulo: "",
-      autor: "",
-      categoria: [],
-      paginas: "",
-      idioma: "",
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+        },
+        body: JSON.stringify(novoLivro),
+      });
+
+      if (!res.ok) throw new Error("Erro ao cadastrar livro.");
+      const { result } = await res.json();
+
+      setLivros((prev) => [...prev, result]); // Atualiza a lista localmente
+      setNovoLivro({
+        title: "",
+        author: "",
+        category: [],
+        pages: "",
+        language: "",
+      });
+    } catch (error) {
+      console.error("Erro ao cadastrar livro:", error);
+    }
   };
 
-  const alterarLivro = (id, novosDados) => {
-    setLivros((prevLivros) =>
-      prevLivros.map((livro) =>
-        livro.id === id ? { ...livro, ...novosDados } : livro
-      )
-    );
+  // 🔹 Atualizar livro na API
+  const alterarLivro = async (id, novosDados) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(novosDados),
+      });
+
+      if (!res.ok) throw new Error("Erro ao atualizar livro.");
+      setLivros((prev) =>
+        prev.map((livro) =>
+          livro._id === id ? { ...livro, ...novosDados } : livro
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao atualizar livro:", error);
+    }
   };
 
-  const deletarLivro = (id) => {
-    setLivros((prevLivros) => prevLivros.filter((livro) => livro.id !== id));
+  // 🔹 Deletar livro da API
+  const deletarLivro = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+
+      if (!res.ok) throw new Error("Erro ao deletar livro.");
+      setLivros((prev) => prev.filter((livro) => livro._id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar livro:", error);
+    }
   };
 
   return (
@@ -104,17 +132,17 @@ function AdminPage() {
         <form className="space-y-4" onSubmit={cadastrarLivro}>
           <input
             type="text"
-            name="titulo"
+            name="title"
             placeholder="Título"
-            value={novoLivro.titulo}
+            value={novoLivro.title}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="text"
-            name="autor"
+            name="author"
             placeholder="Autor"
-            value={novoLivro.autor}
+            value={novoLivro.author}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -128,7 +156,7 @@ function AdminPage() {
                   type="button"
                   onClick={() => handleCategoriaChange(cat)}
                   className={`px-3 py-1 rounded-md border ${
-                    novoLivro.categoria.includes(cat)
+                    novoLivro.category.includes(cat)
                       ? "bg-green-500 text-white border-green-700"
                       : "bg-gray-200 text-black border-gray-400"
                   }`}
@@ -141,17 +169,25 @@ function AdminPage() {
 
           <input
             type="number"
-            name="paginas"
+            name="pages"
             placeholder="Páginas"
-            value={novoLivro.paginas}
+            value={novoLivro.pages}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="text"
-            name="idioma"
+            name="language"
             placeholder="Idioma"
-            value={novoLivro.idioma}
+            value={novoLivro.language}
+            onChange={handleInputChange}
+            className="w-full p-2 border rounded-md"
+          />
+          <input
+            type="number"
+            name="price"
+            placeholder="Preço"
+            value={novoLivro.price}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -168,14 +204,15 @@ function AdminPage() {
       <div className="col-span-3 overflow-y-auto p-6 bg-gray-800">
         <h1 className="text-2xl font-bold text-white mb-4">Gerenciar Livros</h1>
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-          {livros.map((livro) => (
-            <CardLivroUpdate
-              key={livro.id}
-              livro={livro}
-              onAlterar={alterarLivro}
-              onDeletar={deletarLivro}
-            />
-          ))}
+          {Array.isArray(livros) &&
+            livros.map((livro) => (
+              <CardLivroUpdate
+                key={livro.id}
+                livro={livro}
+                onAlterar={alterarLivro}
+                onDeletar={deletarLivro}
+              />
+            ))}
         </div>
       </div>
     </div>

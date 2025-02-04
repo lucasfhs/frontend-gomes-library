@@ -82,6 +82,13 @@ function CardLivroUpdate({ livro, onAlterar, onDeletar }) {
           onChange={handleInputChange}
           className="w-full p-2 border rounded-md"
         />
+        <input
+          type="number"
+          name="preco"
+          value={formDados.preco}
+          onChange={handleInputChange}
+          className="w-full p-2 border rounded-md"
+        />
       </div>
 
       {/* Botões de Alterar e Deletar */}
