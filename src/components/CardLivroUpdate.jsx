@@ -49,23 +49,35 @@ function CardLivroUpdate({ livro, onAlterar, onDeletar }) {
 
         {/* Lista de categorias clicáveis */}
         <div className="flex flex-wrap gap-2">
-          {["Ficção", "Não-ficção", "Romance", "Fantasia", "Suspense"].map(
-            (cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={handleCategoriaChange}
-                value={cat}
-                className={`px-3 py-1 rounded-md border ${
-                  formDados.categoria.includes(cat)
-                    ? "bg-green-500 text-white border-green-700"
-                    : "bg-gray-200 text-black border-gray-400"
-                }`}
-              >
-                {cat}
-              </button>
-            )
-          )}
+          {[
+            "Ficção",
+            "Não-ficção",
+            "Romance",
+            "Biografia",
+            "Fantasia",
+            "Ciência",
+            "História",
+            "Terror",
+            "Infantil",
+            "Aventura",
+            "Suspense",
+            "Autoajuda",
+            "Religioso",
+          ].map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={handleCategoriaChange}
+              value={cat}
+              className={`px-3 py-1 rounded-md border ${
+                formDados.categoria.includes(cat)
+                  ? "bg-green-500 text-white border-green-700"
+                  : "bg-gray-200 text-black border-gray-400"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
         <input

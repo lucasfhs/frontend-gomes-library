@@ -8,6 +8,7 @@ function AdminPage() {
     title: "",
     author: "",
     category: [],
+    price: "",
     pages: "",
     language: "",
   });
@@ -83,6 +84,7 @@ function AdminPage() {
         author: "",
         category: [],
         pages: "",
+        price: "",
         language: "",
       });
     } catch (error) {
@@ -95,14 +97,18 @@ function AdminPage() {
     try {
       const res = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+        },
         body: JSON.stringify(novosDados),
       });
 
       if (!res.ok) throw new Error("Erro ao atualizar livro.");
       setLivros((prev) =>
         prev.map((livro) =>
-          livro._id === id ? { ...livro, ...novosDados } : livro
+          livro.id === id ? { ...livro, ...novosDados } : livro
         )
       );
     } catch (error) {
@@ -113,10 +119,17 @@ function AdminPage() {
   // 🔹 Deletar livro da API
   const deletarLivro = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+        },
+      });
 
       if (!res.ok) throw new Error("Erro ao deletar livro.");
-      setLivros((prev) => prev.filter((livro) => livro._id !== id));
+      setLivros((prev) => prev.filter((livro) => livro.id !== id));
     } catch (error) {
       console.error("Erro ao deletar livro:", error);
     }
@@ -149,22 +162,34 @@ function AdminPage() {
 
           {/* Seleção de Categorias */}
           <div className="flex flex-wrap gap-2">
-            {["Ficção", "Não-ficção", "Romance", "Fantasia", "Suspense"].map(
-              (cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => handleCategoriaChange(cat)}
-                  className={`px-3 py-1 rounded-md border ${
-                    novoLivro.category.includes(cat)
-                      ? "bg-green-500 text-white border-green-700"
-                      : "bg-gray-200 text-black border-gray-400"
-                  }`}
-                >
-                  {cat}
-                </button>
-              )
-            )}
+            {[
+              "Ficção",
+              "Não-ficção",
+              "Romance",
+              "Biografia",
+              "Fantasia",
+              "Ciência",
+              "História",
+              "Terror",
+              "Infantil",
+              "Aventura",
+              "Suspense",
+              "Autoajuda",
+              "Religioso",
+            ].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => handleCategoriaChange(cat)}
+                className={`px-3 py-1 rounded-md border ${
+                  novoLivro.category.includes(cat)
+                    ? "bg-green-500 text-white border-green-700"
+                    : "bg-gray-200 text-black border-gray-400"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
           <input
@@ -174,6 +199,7 @@ function AdminPage() {
             value={novoLivro.pages}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
+            min="1"
           />
           <input
             type="text"
@@ -190,6 +216,7 @@ function AdminPage() {
             value={novoLivro.price}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
+            min="1"
           />
           <button
             type="submit"
