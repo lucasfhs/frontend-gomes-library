@@ -12,7 +12,18 @@ function CardBibliotecaUpdate({ biblioteca, onAlterar, onDeletar }) {
   };
 
   const handleAlterar = () => {
-    onAlterar(biblioteca.id, formDados);
+    onAlterar(biblioteca.id, {
+      name: formDados.nome,
+      phoneNumber: formDados.telefone,
+      address: {
+        street: formDados.endereco.rua,
+        neighborhood: formDados.endereco.bairro,
+        city: formDados.endereco.cidade,
+        state: formDados.endereco.estado,
+        country: formDados.endereco.pais,
+        postal_code: formDados.endereco.cep,
+      },
+    });
   };
 
   const handleDeletar = () => {

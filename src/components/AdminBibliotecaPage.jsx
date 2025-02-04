@@ -1,62 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardBibliotecaUpdate from "./CardBibliotecaUpdate";
+import NotificationBar from "./NotificationBar";
 
 function AdminBibliotecaPage() {
-  const [bibliotecas, setBibliotecas] = useState([
-    {
-      id: 1,
-      nome: "Biblioteca Central",
-      telefone: "11987654321",
-      endereco: {
-        rua: "Rua A",
-        bairro: "Centro",
-        cidade: "São Paulo",
-        estado: "SP",
-        pais: "Brasil",
-        cep: "01000-000",
-      },
-    },
-    {
-      id: 1,
-      nome: "Biblioteca Central",
-      telefone: "11987654321",
-      endereco: {
-        rua: "Rua A",
-        bairro: "Centro",
-        cidade: "São Paulo",
-        estado: "SP",
-        pais: "Brasil",
-        cep: "01000-000",
-      },
-    },
-    {
-      id: 1,
-      nome: "Biblioteca Central",
-      telefone: "11987654321",
-      endereco: {
-        rua: "Rua A",
-        bairro: "Centro",
-        cidade: "São Paulo",
-        estado: "SP",
-        pais: "Brasil",
-        cep: "01000-000",
-      },
-    },
-  ]);
-
+  const API_URL = "http://localhost:3000/library";
+  const [bibliotecas, setBibliotecas] = useState([]);
+  const [notification, setNotification] = useState(null);
   const [novaBiblioteca, setNovaBiblioteca] = useState({
-    nome: "",
-    telefone: "",
-    endereco: {
-      rua: "",
-      bairro: "",
-      cidade: "",
-      estado: "",
-      pais: "",
-      cep: "",
+    name: "",
+    phoneNumber: "",
+    address: {
+      street: "",
+      neighborhood: "",
+      city: "",
+      state: "",
+      country: "",
+      postal_code: "",
     },
   });
-
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
+  useEffect(() => {
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setBibliotecas(data);
+        showNotification("Bibliotecas carregados com sucesso!", "success");
+      })
+      .catch((error) => {
+        showNotification("Erro ao carregar bibliotecas.", "error");
+        console.log(error);
+      });
+  }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNovaBiblioteca((prev) => ({
@@ -65,45 +53,100 @@ function AdminBibliotecaPage() {
     }));
   };
 
-  const cadastrarBiblioteca = (e) => {
+  const cadastrarBiblioteca = async (e) => {
     e.preventDefault();
     if (
       !novaBiblioteca.nome ||
       !novaBiblioteca.telefone ||
       Object.values(novaBiblioteca.endereco).some((v) => !v)
     ) {
-      alert("Preencha todos os campos.");
+      showNotification("Preencha todos os campos", "danger");
       return;
     }
 
-    setBibliotecas((prev) => [
-      ...prev,
-      { ...novaBiblioteca, id: prev.length + 1 },
-    ]);
-    setNovaBiblioteca({
-      nome: "",
-      telefone: "",
-      endereco: {
-        rua: "",
-        bairro: "",
-        cidade: "",
-        estado: "",
-        pais: "",
-        cep: "",
-      },
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        },
+        body: JSON.stringify(novaBiblioteca),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao cadastrar biblioteca.");
+      }
+
+      const { result } = await res.json();
+      setBibliotecas((prev) => [...prev, result]); // Atualiza a lista localmente
+      setNovaBiblioteca({
+        name: "",
+        phoneNumber: "",
+        address: {
+          street: "",
+          neighborhood: "",
+          city: "",
+          state: "",
+          country: "",
+          postal_code: "",
+        },
+      });
+      showNotification("Biblioteca cadastrada com sucesso!", "success");
+    } catch (error) {
+      showNotification(
+        "Erro ao cadastrar biblioteca." + error.message,
+        "danger"
+      );
+      console.error("Erro ao cadastrar biblioteca:", error);
+    }
   };
 
-  const alterarBiblioteca = (id, novosDados) => {
-    setBibliotecas((prev) =>
-      prev.map((biblioteca) =>
-        biblioteca.id === id ? { ...biblioteca, ...novosDados } : biblioteca
-      )
-    );
+  const alterarBiblioteca = async (id, novosDados) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+        },
+        body: JSON.stringify(novosDados),
+      });
+      if (!res.ok) throw new Error("Erro ao atualizar biblioteca.");
+      setBibliotecas((prev) =>
+        prev.map((biblioteca) =>
+          biblioteca.id === id ? { ...biblioteca, ...novosDados } : livro
+        )
+      );
+      showNotification("Biblioteca alterado com sucesso.", "success");
+    } catch (error) {
+      showNotification("Erro ao atualizar" + error.message, "danger");
+      console.error("Erro ao atualizar biblioteca:", error);
+    }
   };
 
-  const deletarBiblioteca = (id) => {
-    setBibliotecas((prev) => prev.filter((biblioteca) => biblioteca.id !== id));
+  const deletarBiblioteca = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+        },
+      });
+
+      if (!res.ok) throw new Error("Erro ao deletar biblioteca.");
+      setBibliotecas((prev) =>
+        prev.filter((biblioteca) => biblioteca.id !== id)
+      );
+      showNotification("Biblioteca deletada com sucesso.", "success");
+    } catch (error) {
+      console.error("Erro ao deletar biblioteca:", error);
+      showNotification("Erro ao deletar biblioteca", "danger");
+    }
   };
 
   return (
@@ -118,7 +161,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="nome"
             placeholder="Nome da Biblioteca"
-            value={novaBiblioteca.nome}
+            value={novaBiblioteca.name}
             onChange={(e) =>
               setNovaBiblioteca({ ...novaBiblioteca, nome: e.target.value })
             }
@@ -128,7 +171,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="telefone"
             placeholder="Telefone (11 dígitos)"
-            value={novaBiblioteca.telefone}
+            value={novaBiblioteca.phoneNumber}
             onChange={(e) =>
               setNovaBiblioteca({ ...novaBiblioteca, telefone: e.target.value })
             }
@@ -141,7 +184,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="rua"
             placeholder="Rua"
-            value={novaBiblioteca.endereco.rua}
+            value={novaBiblioteca.address.street}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -149,7 +192,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="bairro"
             placeholder="Bairro"
-            value={novaBiblioteca.endereco.bairro}
+            value={novaBiblioteca.address.neighborhood}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -157,7 +200,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="cidade"
             placeholder="Cidade"
-            value={novaBiblioteca.endereco.cidade}
+            value={novaBiblioteca.address.city}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -165,7 +208,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="estado"
             placeholder="Estado"
-            value={novaBiblioteca.endereco.estado}
+            value={novaBiblioteca.address.state}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -173,7 +216,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="pais"
             placeholder="País"
-            value={novaBiblioteca.endereco.pais}
+            value={novaBiblioteca.address.country}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -181,7 +224,7 @@ function AdminBibliotecaPage() {
             type="text"
             name="cep"
             placeholder="CEP"
-            value={novaBiblioteca.endereco.cep}
+            value={novaBiblioteca.address.postal_code}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -211,6 +254,13 @@ function AdminBibliotecaPage() {
           ))}
         </div>
       </div>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }
