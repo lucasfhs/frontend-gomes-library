@@ -64,7 +64,7 @@ function AdminPage() {
       !novoLivro.author ||
       novoLivro.category.length === 0
     ) {
-      alert("Preencha todos os campos e selecione pelo menos uma categoria.");
+      showNotification("Preencha todos os campos", "danger");
       return;
     }
 
@@ -79,9 +79,10 @@ function AdminPage() {
         body: JSON.stringify(novoLivro),
       });
 
-      if (!res.ok) throw new Error("Erro ao cadastrar livro.");
+      if (!res.ok) {
+        throw new Error("Erro ao cadastrar livro.");
+      }
       const { result } = await res.json();
-
       setLivros((prev) => [...prev, result]); // Atualiza a lista localmente
       setNovoLivro({
         title: "",
@@ -91,7 +92,9 @@ function AdminPage() {
         price: "",
         language: "",
       });
+      showNotification("Livro cadastrado com sucesso!", "success");
     } catch (error) {
+      showNotification("Erro ao cadastrar livro." + error.message, "danger");
       console.error("Erro ao cadastrar livro:", error);
     }
   };
@@ -115,7 +118,9 @@ function AdminPage() {
           livro.id === id ? { ...livro, ...novosDados } : livro
         )
       );
+      showNotification("Livro alterado com sucesso.", "success");
     } catch (error) {
+      showNotification("Erro ao atualizar" + error.message, "danger");
       console.error("Erro ao atualizar livro:", error);
     }
   };
@@ -134,8 +139,10 @@ function AdminPage() {
 
       if (!res.ok) throw new Error("Erro ao deletar livro.");
       setLivros((prev) => prev.filter((livro) => livro.id !== id));
+      showNotification("Livro deletado com sucesso.", "success");
     } catch (error) {
       console.error("Erro ao deletar livro:", error);
+      showNotification("Erro ao deletar livro", "danger");
     }
   };
 
