@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CardLivroUpdate from "./CardLivroUpdate";
+import NotificationBar from "./NotificationBar";
 
 function AdminPage() {
   const API_URL = "http://localhost:3000/book";
   const [livros, setLivros] = useState([]);
+  const [notification, setNotification] = useState(null);
   const [novoLivro, setNovoLivro] = useState({
     title: "",
     author: "",
@@ -12,7 +14,9 @@ function AdminPage() {
     pages: "",
     language: "",
   });
-
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
   // 🔹 Buscar livros da API ao carregar a página
   useEffect(() => {
     fetch(API_URL, {
@@ -30,10 +34,10 @@ function AdminPage() {
         return res.json();
       })
       .then((data) => {
-        console.log("Dados recebidos da API:", data);
         setLivros(data);
+        showNotification("Livros carregados com sucesso!", "success");
       })
-      .catch((error) => console.error("Erro ao buscar livros:", error));
+      .catch(() => showNotification("Erro ao carregar livros.", "error"));
   }, []);
 
   const handleInputChange = (e) => {
@@ -242,6 +246,13 @@ function AdminPage() {
             ))}
         </div>
       </div>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }

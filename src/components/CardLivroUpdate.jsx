@@ -21,7 +21,15 @@ function CardLivroUpdate({ livro, onAlterar, onDeletar }) {
   };
 
   const handleAlterar = () => {
-    onAlterar(livro.id, formDados);
+    console.log(formDados);
+    onAlterar(livro.id, {
+      title: formDados.titulo,
+      author: formDados.autor,
+      category: formDados.categoria,
+      pages: formDados.paginas,
+      price: formDados.preco,
+      language: formDados.idioma,
+    });
   };
 
   const handleDeletar = () => {
