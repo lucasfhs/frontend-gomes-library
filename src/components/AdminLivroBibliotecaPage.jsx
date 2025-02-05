@@ -7,6 +7,7 @@ function AdminLivroBibliotecaPage() {
   const [livrosBiblioteca, setLivrosBiblioteca] = useState([]);
   const [notification, setNotification] = useState(null);
   const [novoRegistro, setNovoRegistro] = useState({
+    id: "",
     idBook: "",
     idLibrary: "",
     amount: "",
@@ -106,7 +107,7 @@ function AdminLivroBibliotecaPage() {
       if (!res.ok)
         throw new Error("Erro ao atualizar relacao livro-biblioteca.");
       setLivrosBiblioteca((prev) =>
-        prev.map((livro) =>
+        prev.map((livrosBiblioteca) =>
           livrosBiblioteca.id === id
             ? { ...livrosBiblioteca, ...novosDados }
             : livrosBiblioteca
@@ -192,10 +193,10 @@ function AdminLivroBibliotecaPage() {
           Gerenciar Relações Livro-Biblioteca
         </h1>
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-          {livrosBiblioteca.map((registro) => (
+          {livrosBiblioteca.map((livrosBiblioteca) => (
             <CardLivroBibliotecaUpdate
-              key={registro.id}
-              livroBiblioteca={registro}
+              key={livrosBiblioteca.id}
+              livroBiblioteca={livrosBiblioteca}
               onAlterar={alterarRegistro}
               onDeletar={deletarRegistro}
             />
