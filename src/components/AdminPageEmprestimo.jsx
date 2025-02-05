@@ -69,7 +69,8 @@ function AdminPageEmprestimo() {
       });
 
       if (!res.ok) {
-        throw new Error("Erro ao cadastrar empréstimo.");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
       }
       const { result } = await res.json();
       setEmprestimos((prev) => [...prev, result]); // Atualiza a lista localmente
@@ -102,7 +103,10 @@ function AdminPageEmprestimo() {
         body: JSON.stringify(novosDados),
       });
 
-      if (!res.ok) throw new Error("Erro ao atualizar empréstimo.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setEmprestimos((prev) =>
         prev.map((emprestimo) =>
           emprestimo.id === id ? { ...emprestimo, ...novosDados } : emprestimo
@@ -126,7 +130,10 @@ function AdminPageEmprestimo() {
         },
       });
 
-      if (!res.ok) throw new Error("Erro ao deletar emprestimo.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setEmprestimos((prev) =>
         prev.filter((emprestimo) => emprestimo.id !== id)
       );

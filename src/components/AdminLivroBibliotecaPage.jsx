@@ -71,7 +71,6 @@ function AdminLivroBibliotecaPage() {
 
       if (!res.ok) {
         const errorResponse = await res.json();
-        console.log(errorResponse);
         throw new Error(errorResponse.message);
       }
       const { result } = await res.json();
@@ -104,8 +103,10 @@ function AdminLivroBibliotecaPage() {
         body: JSON.stringify(novosDados),
       });
 
-      if (!res.ok)
-        throw new Error("Erro ao atualizar relacao livro-biblioteca.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setLivrosBiblioteca((prev) =>
         prev.map((livrosBiblioteca) =>
           livrosBiblioteca.id === id
@@ -134,7 +135,10 @@ function AdminLivroBibliotecaPage() {
         },
       });
 
-      if (!res.ok) throw new Error("Erro ao deletar livro.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setLivrosBiblioteca((prev) =>
         prev.filter((livrosBiblioteca) => livrosBiblioteca.id !== id)
       );

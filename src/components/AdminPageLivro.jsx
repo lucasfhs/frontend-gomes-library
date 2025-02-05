@@ -80,7 +80,8 @@ function AdminPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Erro ao cadastrar livro.");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
       }
       const { result } = await res.json();
       setLivros((prev) => [...prev, result]); // Atualiza a lista localmente
@@ -112,7 +113,10 @@ function AdminPage() {
         body: JSON.stringify(novosDados),
       });
 
-      if (!res.ok) throw new Error("Erro ao atualizar livro.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setLivros((prev) =>
         prev.map((livro) =>
           livro.id === id ? { ...livro, ...novosDados } : livro
@@ -137,7 +141,10 @@ function AdminPage() {
         },
       });
 
-      if (!res.ok) throw new Error("Erro ao deletar livro.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setLivros((prev) => prev.filter((livro) => livro.id !== id));
       showNotification("Livro deletado com sucesso.", "success");
     } catch (error) {

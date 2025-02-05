@@ -89,7 +89,8 @@ function AdminBibliotecaPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Erro ao cadastrar biblioteca.");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
       }
 
       const { result } = await res.json();
@@ -128,7 +129,10 @@ function AdminBibliotecaPage() {
         },
         body: JSON.stringify(novosDados),
       });
-      if (!res.ok) throw new Error("Erro ao atualizar biblioteca.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setBibliotecas((prev) =>
         prev.map((biblioteca) =>
           biblioteca.id === id ? { ...biblioteca, ...novosDados } : biblioteca
@@ -152,7 +156,10 @@ function AdminBibliotecaPage() {
         },
       });
 
-      if (!res.ok) throw new Error("Erro ao deletar biblioteca.");
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message);
+      }
       setBibliotecas((prev) =>
         prev.filter((biblioteca) => biblioteca.id !== id)
       );
