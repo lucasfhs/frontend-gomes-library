@@ -1,74 +1,140 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardEmprestimoUpdate from "./CardEmprestimoUpdate";
+import NotificationBar from "./NotificationBar";
 
-function AdminPageEmprestimos() {
-  const [emprestimos, setEmprestimos] = useState([
-    {
-      id: 1,
-      cpfUsuario: "12345678901",
-      idLivro: 2,
-      idBiblioteca: 1,
-      dataEmprestimo: "2024-02-01",
-      dataDevolucao: "",
-    },
-    {
-      id: 2,
-      cpfUsuario: "98765432100",
-      idLivro: 3,
-      idBiblioteca: 2,
-      dataEmprestimo: "2024-01-25",
-      dataDevolucao: "2024-02-05",
-    },
-  ]);
-
+function AdminPageEmprestimo() {
+  const API_URL = "http://localhost:3000/loan";
+  const [emprestimos, setEmprestimos] = useState([]);
+  const [notification, setNotification] = useState(null);
   const [novoEmprestimo, setNovoEmprestimo] = useState({
-    cpfUsuario: "",
-    idLivro: "",
-    idBiblioteca: "",
-    dataEmprestimo: "",
-    dataDevolucao: "",
+    cpfUser: "",
+    idBook: "",
+    idLibrary: "",
+    dateLoan: "",
+    dateReturn: "",
   });
+
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
+
+  useEffect(() => {
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setEmprestimos(data);
+        showNotification("Empréstimos carregados com sucesso!", "success");
+      })
+      .catch(() => showNotification("Erro ao carregar empréstimos.", "error"));
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNovoEmprestimo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const cadastrarEmprestimo = (e) => {
+  const cadastrarEmprestimo = async (e) => {
     e.preventDefault();
     if (
-      !novoEmprestimo.cpfUsuario ||
-      !novoEmprestimo.idLivro ||
-      !novoEmprestimo.idBiblioteca ||
-      !novoEmprestimo.dataEmprestimo
+      !novoEmprestimo.cpfUser ||
+      !novoEmprestimo.idBook ||
+      !novoEmprestimo.idLibrary ||
+      !novoEmprestimo.dateLoan
     ) {
-      alert("Preencha todos os campos obrigatórios!");
+      showNotification("Preencha todos os campos!", "danger");
       return;
     }
 
-    setEmprestimos((prev) => [
-      ...prev,
-      { ...novoEmprestimo, id: prev.length + 1 },
-    ]);
-    setNovoEmprestimo({
-      cpfUsuario: "",
-      idLivro: "",
-      idBiblioteca: "",
-      dataEmprestimo: "",
-      dataDevolucao: "",
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        },
+        body: JSON.stringify(novoEmprestimo),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao cadastrar empréstimo.");
+      }
+      const { result } = await res.json();
+      setEmprestimos((prev) => [...prev, result]); // Atualiza a lista localmente
+      setNovoEmprestimo({
+        cpfUser: "",
+        idBook: "",
+        idLibrary: "",
+        dateLoan: "",
+        dateReturn: "",
+      });
+      showNotification("Empréstimo cadastrado com sucesso!", "success");
+    } catch (error) {
+      showNotification(
+        "Erro ao cadastrar empréstimo." + error.message,
+        "danger"
+      );
+      console.error("Erro ao cadastrar empréstimo:", error);
+    }
   };
 
-  const alterarEmprestimo = (id, novosDados) => {
-    setEmprestimos((prev) =>
-      prev.map((emprestimo) =>
-        emprestimo.id === id ? { ...emprestimo, ...novosDados } : emprestimo
-      )
-    );
+  const alterarEmprestimo = async (id, novosDados) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        },
+        body: JSON.stringify(novosDados),
+      });
+
+      if (!res.ok) throw new Error("Erro ao atualizar empréstimo.");
+      setEmprestimos((prev) =>
+        prev.map((emprestimo) =>
+          emprestimo.id === id ? { ...emprestimo, ...novosDados } : emprestimo
+        )
+      );
+      showNotification("Empréstimo alterado com sucesso.", "success");
+    } catch (error) {
+      showNotification("Erro ao atualizar" + error.message, "danger");
+      console.error("Erro ao atualizar empréstimo:", error);
+    }
   };
 
-  const deletarEmprestimo = (id) => {
-    setEmprestimos((prev) => prev.filter((emprestimo) => emprestimo.id !== id));
+  const deletarEmprestimo = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        },
+      });
+
+      if (!res.ok) throw new Error("Erro ao deletar emprestimo.");
+      setEmprestimos((prev) =>
+        prev.filter((emprestimo) => emprestimo.id !== id)
+      );
+      showNotification("Empréstimo deletado com sucesso.", "success");
+    } catch (error) {
+      console.error("Erro ao deletar empréstimo:", error);
+      showNotification("Erro ao deletar empréstimo.", "danger");
+    }
   };
 
   return (
@@ -81,41 +147,41 @@ function AdminPageEmprestimos() {
         <form className="space-y-4" onSubmit={cadastrarEmprestimo}>
           <input
             type="text"
-            name="cpfUsuario"
+            name="cpfUser"
             placeholder="CPF do Usuário"
-            value={novoEmprestimo.cpfUsuario}
+            value={novoEmprestimo.cpfUser}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="number"
-            name="idLivro"
+            name="idBook"
             placeholder="ID do Livro"
-            value={novoEmprestimo.idLivro}
+            value={novoEmprestimo.idBook}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="number"
-            name="idBiblioteca"
+            name="idLibrary"
             placeholder="ID da Biblioteca"
-            value={novoEmprestimo.idBiblioteca}
+            value={novoEmprestimo.idLibrary}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="date"
-            name="dataEmprestimo"
+            name="dateLoan"
             placeholder="Data de Empréstimo"
-            value={novoEmprestimo.dataEmprestimo}
+            value={novoEmprestimo.dateLoan}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="date"
-            name="dataDevolucao"
+            name="dateReturn"
             placeholder="Data de Devolução (Opcional)"
-            value={novoEmprestimo.dataDevolucao}
+            value={novoEmprestimo.dateReturn}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
@@ -144,8 +210,15 @@ function AdminPageEmprestimos() {
           ))}
         </div>
       </div>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }
 
-export default AdminPageEmprestimos;
+export default AdminPageEmprestimo;

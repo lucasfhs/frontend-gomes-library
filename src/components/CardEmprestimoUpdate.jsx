@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function CardEmprestimoUpdate({ emprestimo, onAlterar, onDeletar }) {
-  const [formDados, setFormDados] = useState(emprestimo);
+  // Função para formatar a data no formato YYYY-MM-DD
+  const formatarData = (data) => {
+    if (!data) return ""; // Retorna string vazia se a data for null
+    return data.split("T")[0]; // Extrai a parte da data (YYYY-MM-DD) do formato ISO
+  };
+
+  // Inicializa o estado com as datas formatadas
+  const [formDados, setFormDados] = useState({
+    ...emprestimo,
+    dataEmprestimo: formatarData(emprestimo.dataEmprestimo),
+    dataDevolucao: formatarData(emprestimo.dataDevolucao),
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -9,7 +20,13 @@ function CardEmprestimoUpdate({ emprestimo, onAlterar, onDeletar }) {
   };
 
   const handleAlterar = () => {
-    onAlterar(emprestimo.id, formDados);
+    onAlterar(emprestimo.id, {
+      cpfUser: formDados.cpfUsuario,
+      idBook: formDados.idLivro,
+      dateLoan: formDados.dataEmprestimo,
+      dateReturn: formDados.dataDevolucao,
+      idLibrary: formDados.idBiblioteca,
+    });
   };
 
   const handleDeletar = () => {
@@ -54,7 +71,7 @@ function CardEmprestimoUpdate({ emprestimo, onAlterar, onDeletar }) {
         <input
           type="date"
           name="dataDevolucao"
-          value={formDados.dataDevolucao || ""}
+          value={formDados.dataDevolucao}
           onChange={handleInputChange}
           className="w-full p-2 border rounded-md"
         />
