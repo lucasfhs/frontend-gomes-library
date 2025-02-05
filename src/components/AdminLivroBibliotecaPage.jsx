@@ -1,59 +1,147 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import NotificationBar from "./NotificationBar";
 import CardLivroBibliotecaUpdate from "./CardLivroBibliotecaUpdate";
 
 function AdminLivroBibliotecaPage() {
-  const [livrosBiblioteca, setLivrosBiblioteca] = useState([
-    { id: 1, idLivro: 101, idBiblioteca: 1, quantidadeDisponivel: 5 },
-    { id: 2, idLivro: 102, idBiblioteca: 2, quantidadeDisponivel: 3 },
-    { id: 3, idLivro: 103, idBiblioteca: 1, quantidadeDisponivel: 7 },
-    { id: 4, idLivro: 104, idBiblioteca: 3, quantidadeDisponivel: 2 },
-  ]);
-
+  const API_URL = "http://localhost:3000/bookLibrary";
+  const [livrosBiblioteca, setLivrosBiblioteca] = useState([]);
+  const [notification, setNotification] = useState(null);
   const [novoRegistro, setNovoRegistro] = useState({
-    idLivro: "",
-    idBiblioteca: "",
-    quantidadeDisponivel: "",
+    idBook: "",
+    idLibrary: "",
+    amount: "",
   });
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
+  useEffect(() => {
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setLivrosBiblioteca(data);
+        showNotification(
+          "Relação Livros-Biblioteca carregadas com sucesso!",
+          "success"
+        );
+      })
+      .catch(() =>
+        showNotification("Erro ao carregar relação Livros-Biblioteca.", "error")
+      );
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNovoRegistro((prev) => ({ ...prev, [name]: value }));
   };
 
-  const cadastrarRegistro = (e) => {
+  const cadastrarRegistro = async (e) => {
     e.preventDefault();
     if (
-      !novoRegistro.idLivro ||
-      !novoRegistro.idBiblioteca ||
-      novoRegistro.quantidadeDisponivel === ""
+      !novoRegistro.idBook ||
+      !novoRegistro.idLibrary ||
+      !novoRegistro.amount
     ) {
-      alert("Preencha todos os campos.");
+      showNotification("Preencha todos os campos", "danger");
       return;
     }
 
-    setLivrosBiblioteca((prev) => [
-      ...prev,
-      { ...novoRegistro, id: prev.length + 1 },
-    ]);
-    setNovoRegistro({
-      idLivro: "",
-      idBiblioteca: "",
-      quantidadeDisponivel: "",
-    });
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+        },
+        body: JSON.stringify(novoRegistro),
+      });
+
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        console.log(errorResponse);
+        throw new Error(errorResponse.message);
+      }
+      const { result } = await res.json();
+      setLivrosBiblioteca((prev) => [...prev, result]); // Atualiza a lista localmente
+      setNovoRegistro({
+        idBook: "",
+        idLibrary: "",
+        amount: "",
+      });
+      showNotification("Relação Livros-Biblioteca com sucesso!", "success");
+    } catch (error) {
+      showNotification(
+        "Erro ao relação livros-biblioteca." + error.message,
+        "danger"
+      );
+      console.error("Erro ao cadastrar relação livros-biblioteca:", error);
+    }
   };
 
-  const alterarRegistro = (id, novosDados) => {
-    setLivrosBiblioteca((prev) =>
-      prev.map((registro) =>
-        registro.id === id ? { ...registro, ...novosDados } : registro
-      )
-    );
+  // 🔹 Atualizar livro na API
+  const alterarRegistro = async (id, novosDados) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+        },
+        body: JSON.stringify(novosDados),
+      });
+
+      if (!res.ok)
+        throw new Error("Erro ao atualizar relacao livro-biblioteca.");
+      setLivrosBiblioteca((prev) =>
+        prev.map((livro) =>
+          livrosBiblioteca.id === id
+            ? { ...livrosBiblioteca, ...novosDados }
+            : livrosBiblioteca
+        )
+      );
+      showNotification(
+        "Relacao livro-biblioteca alterado com sucesso.",
+        "success"
+      );
+    } catch (error) {
+      showNotification("Erro ao atualizar" + error.message, "danger");
+      console.error("Erro ao atualizar relacao livro-biblioteca:", error);
+    }
   };
 
-  const deletarRegistro = (id) => {
-    setLivrosBiblioteca((prev) =>
-      prev.filter((registro) => registro.id !== id)
-    );
+  const deletarRegistro = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+        },
+      });
+
+      if (!res.ok) throw new Error("Erro ao deletar livro.");
+      setLivrosBiblioteca((prev) =>
+        prev.filter((livrosBiblioteca) => livrosBiblioteca.id !== id)
+      );
+      showNotification("Livro deletado com sucesso.", "success");
+    } catch (error) {
+      console.error("Erro ao deletar relação livro-biblioteca:", error);
+      showNotification("Erro ao deletar relação livro-biblioteca", "danger");
+    }
   };
 
   return (
@@ -66,25 +154,25 @@ function AdminLivroBibliotecaPage() {
         <form className="space-y-4" onSubmit={cadastrarRegistro}>
           <input
             type="number"
-            name="idLivro"
+            name="idBook"
             placeholder="ID do Livro"
-            value={novoRegistro.idLivro}
+            value={novoRegistro.idBook}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="number"
-            name="idBiblioteca"
+            name="idLibrary"
             placeholder="ID da Biblioteca"
-            value={novoRegistro.idBiblioteca}
+            value={novoRegistro.idLibrary}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
           />
           <input
             type="number"
-            name="quantidadeDisponivel"
+            name="amount"
             placeholder="Quantidade Disponível"
-            value={novoRegistro.quantidadeDisponivel}
+            value={novoRegistro.amount}
             onChange={handleInputChange}
             className="w-full p-2 border rounded-md"
             min="0"
@@ -114,6 +202,13 @@ function AdminLivroBibliotecaPage() {
           ))}
         </div>
       </div>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }

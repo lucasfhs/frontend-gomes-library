@@ -9,7 +9,11 @@ function CardLivroBibliotecaUpdate({ livroBiblioteca, onAlterar, onDeletar }) {
   };
 
   const handleAlterar = () => {
-    onAlterar(livroBiblioteca.id, formDados);
+    onAlterar(livroBiblioteca.id, {
+      idBook: formDados.idLivro,
+      idLibrary: formDados.idBiblioteca,
+      amount: formDados.quantidadeDisponivel,
+    });
   };
 
   const handleDeletar = () => {
