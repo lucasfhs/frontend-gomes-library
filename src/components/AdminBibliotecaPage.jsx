@@ -21,13 +21,13 @@ function AdminBibliotecaPage() {
   const showNotification = (message, type) => {
     setNotification({ message, type });
   };
+
   useEffect(() => {
     fetch(API_URL, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        Authorization: sessionStorage.getItem("tokenAdmin"),
       },
     })
       .then((res) => {
@@ -82,8 +82,7 @@ function AdminBibliotecaPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novaBiblioteca),
       });
@@ -124,8 +123,7 @@ function AdminBibliotecaPage() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novosDados),
       });
@@ -151,8 +149,7 @@ function AdminBibliotecaPage() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMzQ1IiwiaWF0IjoxNzM4MTA5ODI5LCJleHAiOjE3Mzg3MTQ2Mjl9.bA3e6ijNoVs4ACCnml0wFivW7HIZGxC_pBkBSacrE6I",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
       });
 

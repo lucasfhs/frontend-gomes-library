@@ -20,8 +20,7 @@ function AdminLivroBibliotecaPage() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+        Authorization: sessionStorage.getItem("tokenAdmin"),
       },
     })
       .then((res) => {
@@ -63,8 +62,7 @@ function AdminLivroBibliotecaPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novoRegistro),
       });
@@ -97,8 +95,7 @@ function AdminLivroBibliotecaPage() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novosDados),
       });
@@ -130,8 +127,7 @@ function AdminLivroBibliotecaPage() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODczMDA3OSwiZXhwIjoxNzM5MzM0ODc5fQ.xegjO8dv1UnNdDRECgtyoxYJ9Ao4YrhXUgd8XZeq05I",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
       });
 

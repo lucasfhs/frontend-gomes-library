@@ -23,8 +23,7 @@ function AdminPageEmprestimo() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+        Authorization: sessionStorage.getItem("tokenAdmin"),
       },
     })
       .then((res) => {
@@ -62,8 +61,7 @@ function AdminPageEmprestimo() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novoEmprestimo),
       });
@@ -97,8 +95,7 @@ function AdminPageEmprestimo() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
         body: JSON.stringify(novosDados),
       });
@@ -125,8 +122,7 @@ function AdminPageEmprestimo() {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTG9naW4iOiJqb2FvLnNpbHZhIiwicGFzc3dvcmQiOiJzZW5oYTEyMyIsImlhdCI6MTczODcwNDA3OSwiZXhwIjoxNzM5MzA4ODc5fQ.U3aBJ0LPUVhakyzMLcVLx1FBPBxXfK0eIsywyVNuZ3A",
+          Authorization: sessionStorage.getItem("tokenAdmin"),
         },
       });
 
