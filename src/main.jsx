@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       <ProtectedRoute role="admin">
         <AdminMainPage />
       </ProtectedRoute>
-    ), 
+    ),
     errorElement: <ErrorPage />,
     children: [
       { path: "", element: <AdminMainPage /> },
@@ -58,7 +58,11 @@ const router = createBrowserRouter([
   { path: "/loginAdmin", element: <LoginAdmin /> },
   { path: "/registerUser", element: <RegisterUser /> },
   { path: "/registerAdmin", element: <RegisterAdmin /> },
-  { path: "/", element: <LandingPage /> },
+  {
+    path: "/",
+    element: <LandingPage />,
+    errorElement: <ErrorPage></ErrorPage>,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
