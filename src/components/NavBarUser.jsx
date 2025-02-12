@@ -1,12 +1,44 @@
 import { BookCheck, User, LogOut, Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 function NavBarUser() {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [userName, setUserName] = useState("User");
   const removeSession = () => {
     sessionStorage.removeItem("tokenUser");
     sessionStorage.removeItem("tokenAdmin");
   };
+
+  const getUserName = async () => {
+    const token = sessionStorage.getItem("tokenUser");
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+    const cpfUser = jwtDecode(token).cpfUser;
+    try {
+      const response = await fetch(`http://localhost:3000/user/${cpfUser}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: sessionStorage.getItem("tokenUser"),
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setUserName(data.nome);
+      } else {
+        console.error("Erro ao buscar o usuário.");
+      }
+    } catch (error) {
+      console.error("Erro inesperado ao buscar o osuario.");
+    }
+  };
+
+  useEffect(() => {
+    getUserName();
+  }, []);
   return (
     <nav className="bg-spring-green border-2 border-rich-black px-6 py-4 flex flex-col md:flex-row md:justify-between md:items-center">
       {/* Logo e Título */}
@@ -59,7 +91,7 @@ function NavBarUser() {
           <Link to="/user/data">
             <div className="flex items-center gap-2">
               <User size={24} />
-              <span>Cliente</span>
+              <span>{userName}</span>
             </div>
           </Link>
           <Link

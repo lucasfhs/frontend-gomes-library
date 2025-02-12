@@ -41,8 +41,6 @@ function CardCadastroUser() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcGZVc2VyIjoiMjM2MTE0ODIwMDUiLCJwYXNzd29yZCI6IjEyMyIsImlhdCI6MTczODU4NTczNCwiZXhwIjoxNzM5MTkwNTM0fQ.Dk3CworqVbx41Le4jONyZhqxSbvvuDz3KBVblKd8x7Y",
         },
         body: JSON.stringify(formData),
       });
