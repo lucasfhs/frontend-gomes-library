@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import NotificationBar from "./NotificationBar";
 function CardLoginUser() {
   const [cpfUser, setCpfUser] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [notification, setNotification] = useState(null);
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -23,12 +26,12 @@ function CardLoginUser() {
         sessionStorage.setItem("tokenUser", data.result);
         navigate("/user/book");
       } else {
-        setErrorMessage(
+        showNotification(
           data.message || "Falha ao autenticar. Verifique seus dados."
         );
       }
     } catch (error) {
-      setErrorMessage(
+      showNotification(
         "Erro ao conectar com o servidor. Tente novamente mais tarde."
       );
     }
@@ -61,13 +64,20 @@ function CardLoginUser() {
           <button className="underline text-sm">Preciso de ajuda</button>
         </div>
       </form>
-      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
       <button
         onClick={handleLogin}
         className="bg-white text-black border border-black hover:bg-black hover:text-white transition-all py-2 px-4 rounded-lg"
       >
         Entrar
       </button>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }

@@ -22,7 +22,7 @@ function CardCadastroUser() {
     },
   });
 
-  const [message, setMessage] = useState("");
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +51,7 @@ function CardCadastroUser() {
 
       const data = await response.json();
       if (response.ok) {
-        showNotification("Usuário cadastrado com sucesso!", "sucess");
+        showNotification("Usuário cadastrado com sucesso!", "success");
       } else {
         showNotification(data.message || "Erro ao cadastrar usuário.");
       }

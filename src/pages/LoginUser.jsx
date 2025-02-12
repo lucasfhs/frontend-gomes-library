@@ -20,6 +20,7 @@ function Login() {
         {/* Footer */}
         <Footer />
       </div>
+      
     </div>
   );
 }

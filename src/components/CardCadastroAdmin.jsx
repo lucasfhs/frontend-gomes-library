@@ -1,7 +1,11 @@
 import { useState } from "react";
 const URLAPI = "http://localhost:3000/auth";
-
+import NotificationBar from "./NotificationBar";
 function CardCadastroAdmin() {
+  const [notification, setNotification] = useState(null);
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
   const [formData, setFormData] = useState({
     userLogin: "",
     password: "",
@@ -32,10 +36,10 @@ function CardCadastroAdmin() {
 
       const data = await response.json();
       console.log("Resposta da API:", data);
-      alert("Cadastro enviado com sucesso!");
+      showNotification("Cadastro enviado com sucesso!", "success");
     } catch (error) {
       console.error("Erro ao enviar o cadastro:", error);
-      alert("Ocorreu um erro ao enviar o cadastro.");
+      showNotification("Ocorreu um erro ao enviar o cadastro.");
     }
   };
 
@@ -73,6 +77,13 @@ function CardCadastroAdmin() {
           Enviar
         </button>
       </form>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }
