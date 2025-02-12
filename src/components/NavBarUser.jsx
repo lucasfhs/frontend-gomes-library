@@ -3,7 +3,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 function NavBarUser() {
   const [menuAberto, setMenuAberto] = useState(false);
-
+  const removeSession = () => {
+    sessionStorage.removeItem("tokenUser");
+    sessionStorage.removeItem("tokenAdmin");
+  };
   return (
     <nav className="bg-spring-green border-2 border-rich-black px-6 py-4 flex flex-col md:flex-row md:justify-between md:items-center">
       {/* Logo e Título */}
@@ -61,6 +64,7 @@ function NavBarUser() {
           </Link>
           <Link
             to="/"
+            onClick={removeSession}
             className="flex items-center gap-2 font-semibold hover:text-india-green transition"
           >
             <LogOut size={24} />

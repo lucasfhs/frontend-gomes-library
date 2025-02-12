@@ -20,6 +20,7 @@ function CardLoginUser() {
       const data = await response.json();
 
       if (response.ok) {
+        sessionStorage.setItem("tokenUser", data.result);
         navigate("/user/book");
       } else {
         setErrorMessage(

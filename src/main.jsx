@@ -19,67 +19,50 @@ import AdminMainPage from "./pages/AdminMainPage.jsx";
 import AdminPageEmprestimo from "./components/AdminPageEmprestimo.jsx";
 import AdminBibliotecaPage from "./components/AdminBibliotecaPage.jsx";
 import AdminLivroBibliotecaPage from "./components/AdminLivroBibliotecaPage.jsx";
-import CardLivro from "./components/CardLivro.jsx";
 import UserProfileUpdate from "./components/UserProfileUpdate.jsx";
 import ListaLivros from "./components/ListaLivros.jsx";
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Home></Home>,
-//   },
-//   {
-//     path: "contact",
-//     element: <Contact></Contact>,
-//   },
-// ]);
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 const router = createBrowserRouter([
   {
     path: "/admin",
-    element: <AdminMainPage></AdminMainPage>,
-    errorElement: <ErrorPage></ErrorPage>,
+    element: (
+      <ProtectedRoute role="admin">
+        <AdminMainPage />
+      </ProtectedRoute>
+    ), 
+    errorElement: <ErrorPage />,
     children: [
-      { path: "book", element: <AdminPageLivro></AdminPageLivro> },
-      { path: "loan", element: <AdminPageEmprestimo></AdminPageEmprestimo> },
-      { path: "library", element: <AdminBibliotecaPage></AdminBibliotecaPage> },
-      {
-        path: "book-library",
-        element: <AdminLivroBibliotecaPage></AdminLivroBibliotecaPage>,
-      },
+      { path: "", element: <AdminMainPage /> },
+      { path: "book", element: <AdminPageLivro /> },
+      { path: "loan", element: <AdminPageEmprestimo /> },
+      { path: "library", element: <AdminBibliotecaPage /> },
+      { path: "book-library", element: <AdminLivroBibliotecaPage /> },
     ],
   },
   {
     path: "/user",
-    element: <UserMainPage></UserMainPage>,
-    errorElement: <ErrorPage></ErrorPage>,
+    element: (
+      <ProtectedRoute role="user">
+        <UserMainPage />
+      </ProtectedRoute>
+    ), // Proteção para usuários autenticados
+    errorElement: <ErrorPage />,
     children: [
-      { path: "loan", element: <UserLoanHistory></UserLoanHistory> },
-      { path: "book", element: <ListaLivros></ListaLivros> },
-      { path: "data", element: <UserProfileUpdate></UserProfileUpdate> },
+      { path: "", element: <UserMainPage /> },
+      { path: "loan", element: <UserLoanHistory /> },
+      { path: "book", element: <ListaLivros /> },
+      { path: "data", element: <UserProfileUpdate /> },
     ],
   },
-  {
-    path: "/loginUser",
-    element: <LoginUser></LoginUser>,
-  },
-  {
-    path: "/loginAdmin",
-    element: <LoginAdmin></LoginAdmin>,
-  },
-  {
-    path: "/registerUser",
-    element: <RegisterUser></RegisterUser>,
-  },
-  {
-    path: "/registerAdmin",
-    element: <RegisterAdmin></RegisterAdmin>,
-  },
-  {
-    path: "/",
-    element: <LandingPage></LandingPage>,
-  },
+  { path: "/loginUser", element: <LoginUser /> },
+  { path: "/loginAdmin", element: <LoginAdmin /> },
+  { path: "/registerUser", element: <RegisterUser /> },
+  { path: "/registerAdmin", element: <RegisterAdmin /> },
+  { path: "/", element: <LandingPage /> },
 ]);
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 );

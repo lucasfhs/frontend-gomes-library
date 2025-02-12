@@ -20,6 +20,7 @@ function CardLoginAdmin() {
       const data = await response.json();
 
       if (response.ok) {
+        sessionStorage.setItem("tokenAdmin", data.result);
         navigate("/admin/book");
       } else {
         setErrorMessage(data.message || "Credenciais inválidas!");
