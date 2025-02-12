@@ -1,6 +1,10 @@
 import { useState } from "react";
-
+import NotificationBar from "./NotificationBar";
 function CardCadastroUser() {
+  const [notification, setNotification] = useState(null);
+  const showNotification = (message, type) => {
+    setNotification({ message, type });
+  };
   const [formData, setFormData] = useState({
     cpf: "",
     name: "",
@@ -47,12 +51,12 @@ function CardCadastroUser() {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage("Usuário cadastrado com sucesso!");
+        showNotification("Usuário cadastrado com sucesso!", "sucess");
       } else {
-        setMessage(data.message || "Erro ao cadastrar usuário.");
+        showNotification(data.message || "Erro ao cadastrar usuário.");
       }
     } catch (error) {
-      setMessage("Erro ao conectar com o servidor. Tente novamente.");
+      showNotification("Erro ao conectar com o servidor. Tente novamente.");
     }
   };
 
@@ -198,6 +202,13 @@ function CardCadastroUser() {
           Enviar
         </button>
       </form>
+      {notification && (
+        <NotificationBar
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
     </div>
   );
 }

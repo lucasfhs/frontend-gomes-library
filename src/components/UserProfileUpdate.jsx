@@ -1,39 +1,150 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+const apiURL = "http://localhost:3000";
 
 function UserProfileUpdate() {
   const [userData, setUserData] = useState({
-    cpf: "12345678901",
-    nome: "Obi Wan Kenobi",
-    email: "obiwan@jedi.com",
-    telefone: "11987654321",
-    dataNascimento: "1977-05-25",
-    rua: "Rua Jedi",
-    bairro: "Aliança Rebelde",
-    cidade: "Coruscant",
-    estado: "Galáxia Central",
-    pais: "República",
-    cep: "00000-000",
+    cpf: "",
+    nome: "",
+    email: "",
+    telefone: "",
+    dataNascimento: "",
+    rua: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    pais: "",
+    cep: "",
     senha: "",
   });
+  const formatarData = (dataNascimento) => {
+    if (!dataNascimento) return ""; // Retorna string vazia se a data for null
+    return dataNascimento.split("T")[0]; // Extrai a parte da data (YYYY-MM-DD) do formato ISO
+  };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("tokenUser");
+
+    if (!token) {
+      alert("Usuário não autenticado.");
+      navigate("/");
+      return;
+    }
+    const cpfUser = jwtDecode(token).cpfUser;
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${apiURL}/user/${cpfUser}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados do usuário.");
+        }
+
+        const data = await response.json();
+
+        setUserData({
+          cpf: data.cpf,
+          nome: data.nome,
+          email: data.email,
+          telefone: data.telefone,
+          dataNascimento: formatarData(data.dataNascimento),
+          rua: data.endereco.rua,
+          bairro: data.endereco.bairro,
+          cidade: data.endereco.cidade,
+          estado: data.endereco.estado,
+          pais: data.endereco.pais,
+          cep: data.endereco.cep,
+          senha: "",
+        });
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar os dados do usuário.");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log("Atualizando dados:", userData);
-    alert("Dados atualizados com sucesso!");
+    const token = sessionStorage.getItem("tokenUser");
+
+    try {
+      const response = await fetch(`${apiURL}/user/${userData.cpf}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          name: userData.nome,
+          email: userData.email,
+          phoneNumber: userData.telefone,
+          birthDate: userData.dataNascimento,
+          password: userData.senha,
+          address: {
+            street: userData.rua,
+            neighborhood: userData.bairro,
+            city: userData.cidade,
+            state: userData.estado,
+            country: userData.pais,
+            postal_code: userData.cep,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar os dados.");
+      }
+
+      alert("Dados atualizados com sucesso! relogue");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao atualizar os dados.");
+    }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (
-      window.confirm(
+      !window.confirm(
         "Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita."
       )
     ) {
-      console.log("Conta excluída:", userData.cpf);
+      return;
+    }
+
+    const token = sessionStorage.getItem("tokenUser");
+
+    try {
+      const response = await fetch(`${apiURL}/user/${userData.cpf}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao excluir a conta.");
+      }
+
       alert("Conta excluída com sucesso!");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir a conta.");
     }
   };
 
@@ -47,7 +158,6 @@ function UserProfileUpdate() {
         onSubmit={handleUpdate}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        {/* Nome */}
         <div>
           <label className="text-white font-semibold">Nome:</label>
           <input
@@ -60,7 +170,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Email */}
         <div>
           <label className="text-white font-semibold">Email:</label>
           <input
@@ -72,7 +181,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Telefone */}
         <div>
           <label className="text-white font-semibold">Telefone:</label>
           <input
@@ -85,7 +193,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Data de Nascimento */}
         <div>
           <label className="text-white font-semibold">
             Data de Nascimento:
@@ -100,7 +207,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Rua */}
         <div>
           <label className="text-white font-semibold">Rua:</label>
           <input
@@ -113,7 +219,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Bairro */}
         <div>
           <label className="text-white font-semibold">Bairro:</label>
           <input
@@ -126,7 +231,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Cidade */}
         <div>
           <label className="text-white font-semibold">Cidade:</label>
           <input
@@ -139,7 +243,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Estado */}
         <div>
           <label className="text-white font-semibold">Estado:</label>
           <input
@@ -152,7 +255,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* País */}
         <div>
           <label className="text-white font-semibold">País:</label>
           <input
@@ -165,7 +267,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* CEP */}
         <div>
           <label className="text-white font-semibold">CEP:</label>
           <input
@@ -178,7 +279,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Senha */}
         <div className="md:col-span-2">
           <label className="text-white font-semibold">Senha:</label>
           <input
@@ -191,7 +291,6 @@ function UserProfileUpdate() {
           />
         </div>
 
-        {/* Botões */}
         <div className="md:col-span-2 flex flex-col md:flex-row gap-4 mt-4">
           <button
             type="submit"
@@ -199,7 +298,6 @@ function UserProfileUpdate() {
           >
             Atualizar Dados
           </button>
-
           <button
             type="button"
             onClick={handleDelete}
