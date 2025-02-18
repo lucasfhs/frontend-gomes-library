@@ -1,18 +1,12 @@
 import { useState } from "react";
 import BibliotecasPopup from "./BibliotecasPopup.jsx";
-
+import AlugarPopup from "./AlugarPopup.jsx";
 function CardLivro({ livro }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAlugarPopupOpen, setIsAlugarPopupOpen] = useState(false);
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
-
-  const handleAlugar = () => {
-    const sucesso = Math.random() > 0.5; // Simulação (substituir por chamada real à API)
-    alert(
-      sucesso ? "📖 Livro alugado com sucesso!" : "❌ Falha ao alugar o livro."
-    );
-  };
 
   return (
     <div className="bg-mint-green p-6 rounded-lg shadow-md border-2 border-rich-black flex flex-col sm:flex-row items-center justify-between">
@@ -71,7 +65,7 @@ function CardLivro({ livro }) {
         {/* Botão de Alugar ou Esgotado */}
         {livro.quantidade_disponivel > 0 ? (
           <button
-            onClick={handleAlugar}
+            onClick={() => setIsAlugarPopupOpen(true)}
             className="mt-6 py-2 px-6 bg-spring-green text-rich-black text-lg font-bold rounded-full border-2 border-rich-black hover:bg-india-green transition"
           >
             Alugar
@@ -89,6 +83,12 @@ function CardLivro({ livro }) {
       {/* Popup */}
       {isPopupOpen && (
         <BibliotecasPopup livroId={livro.id} onClose={closePopup} />
+      )}
+      {isAlugarPopupOpen && (
+        <AlugarPopup
+          livroId={livro.id}
+          onClose={() => setIsAlugarPopupOpen(false)}
+        />
       )}
     </div>
   );
