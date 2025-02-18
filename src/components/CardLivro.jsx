@@ -15,17 +15,20 @@ function CardLivro({ livro }) {
   };
 
   return (
-    <div className="bg-mint-green p-6 rounded-lg shadow-md border-2 border-rich-black flex items-center justify-between">
+    <div className="bg-mint-green p-6 rounded-lg shadow-md border-2 border-rich-black flex flex-col sm:flex-row items-center justify-between">
       {/* Imagem do Livro */}
       <div className="flex items-center">
         <div className="w-32 h-32 bg-rich-black flex items-center justify-center rounded-md">
-          <img
-            src="https://cdn.pixabay.com/photo/2016/03/27/19/32/book-1283865_640.jpg  "
-            alt=""
-            srcset=""
-            className="w-full h-full object-cover border-2 border-rich-black rounded"
-          />
-          {/* <span className="text-white text-2xl">📚</span> */}
+          {livro.img_url ? (
+            <img
+              src={livro.img_url}
+              alt=""
+              srcset=""
+              className="w-full h-full object-fill border-2 border-rich-black rounded"
+            />
+          ) : (
+            <span className="text-white text-2xl">📚</span>
+          )}
         </div>
         {/* Informações do Livro */}
         <div className="ml-6">
@@ -61,16 +64,26 @@ function CardLivro({ livro }) {
       <div className="text-right flex flex-col">
         <button
           onClick={openPopup}
-          className="text-rich-black underline cursor-pointer hover:text-india-green transition"
+          className="text-rich-black text-md font-publicSans underline cursor-pointer mt-2 hover:text-india-green transition"
         >
           Bibliotecas que Possuem o Livro
         </button>
-        <button
-          onClick={handleAlugar}
-          className="mt-6 py-2 px-6 bg-spring-green text-rich-black text-lg font-bold rounded-full border-2 border-rich-black hover:bg-india-green transition"
-        >
-          Desejo Alugar !
-        </button>
+        {/* Botão de Alugar ou Esgotado */}
+        {livro.quantidade_disponivel > 0 ? (
+          <button
+            onClick={handleAlugar}
+            className="mt-6 py-2 px-6 bg-spring-green text-rich-black text-lg font-bold rounded-full border-2 border-rich-black hover:bg-india-green transition"
+          >
+            Alugar
+          </button>
+        ) : (
+          <button
+            className="mt-6 py-2 px-6 bg-red-500 text-white text-lg font-bold rounded-full border-2 border-rich-black cursor-not-allowed"
+            disabled
+          >
+            Esgotado
+          </button>
+        )}
       </div>
 
       {/* Popup */}
