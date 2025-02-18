@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
 
 function BibliotecasPopup({ onClose, livroId }) {
-  const [bibliotecas, setBibliotecas] = useState([
-    { id: 1, nome: "Biblioteca Central", quantidade: 4 },
-    { id: 2, nome: "Biblioteca Municipal", quantidade: 2 },
-    { id: 3, nome: "Biblioteca Universitária", quantidade: 6 },
-  ]);
+  const [bibliotecas, setBibliotecas] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (!livroId) return;
-
-  //   fetch(`https://api.exemplo.com/livros/${livroId}/bibliotecas`) // Substitua pela URL da API real
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setBibliotecas(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Erro ao carregar bibliotecas:", error);
-  //       setLoading(false);
-  //     });
-  // }, [livroId]);
+  useEffect(() => {
+    if (!livroId) return;
+    setLoading(true);
+    let API_URL = `http://localhost:3000/report/getBookAvailability/${livroId}`;
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("tokenUser"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setBibliotecas(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar bibliotecas:", error);
+        setLoading(false);
+      });
+  }, [livroId]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -39,7 +42,7 @@ function BibliotecasPopup({ onClose, livroId }) {
                 key={biblioteca.id}
                 className="text-rich-black flex justify-between border-b pb-2"
               >
-                <span>{biblioteca.nome}</span>
+                <span>{biblioteca.biblioteca}</span>
                 <span className="font-bold">
                   {biblioteca.quantidade} disponíveis
                 </span>
