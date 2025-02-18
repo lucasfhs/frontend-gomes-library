@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardLivro from "./CardLivro.jsx";
 
 function ListaLivros() {
+  const API_URL = "http://localhost:3000/report/getBookCatalog";
   const [livros, setLivros] = useState([
     {
       titulo: "O Senhor dos Anéis",
@@ -21,17 +22,22 @@ function ListaLivros() {
     },
   ]);
 
-  //   useEffect(() => {
-  //     // Simula chamada à API (substituir futuramente pela API real)
-  //     fetch("https://api.exemplo.com/livros") // Altere para a API real
-  //       .then((res) => res.json())
-  //       .then((data) => setLivros(data))
-  //       .catch((error) => console.error("Erro ao carregar livros:", error));
-  //   }, []);
+  useEffect(() => {
+    fetch(API_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: sessionStorage.getItem("tokenUser"),
+      },
+    }) // Altere para a API real
+      .then((res) => res.json())
+      .then((data) => setLivros(data))
+      .catch((error) => console.error("Erro ao carregar livros:", error));
+  }, []);
 
   return (
     <div className="max-w-5xl mx-auto mt-8">
-      <div className="space-y-6">
+      <div className="h-screen space-y-6 mb-8 overflow-y-auto">
         {livros.map((livro, index) => (
           <CardLivro key={index} livro={livro} />
         ))}

@@ -22,8 +22,6 @@ function CardCadastroUser() {
     },
   });
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.includes("address.")) {
@@ -65,7 +63,7 @@ function CardCadastroUser() {
       <h2 className="text-center text-3xl font-bold text-black mb-6">
         Cadastro
       </h2>
-      {message && <p className="text-center text-red-500">{message}</p>}
+
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
           <label className="block text-rich-black font-semibold">CPF</label>

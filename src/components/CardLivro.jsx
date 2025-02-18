@@ -19,7 +19,13 @@ function CardLivro({ livro }) {
       {/* Imagem do Livro */}
       <div className="flex items-center">
         <div className="w-32 h-32 bg-rich-black flex items-center justify-center rounded-md">
-          <span className="text-white text-2xl">📚</span>
+          <img
+            src="https://cdn.pixabay.com/photo/2016/03/27/19/32/book-1283865_640.jpg  "
+            alt=""
+            srcset=""
+            className="w-full h-full object-cover border-2 border-rich-black rounded"
+          />
+          {/* <span className="text-white text-2xl">📚</span> */}
         </div>
         {/* Informações do Livro */}
         <div className="ml-6">
@@ -36,12 +42,17 @@ function CardLivro({ livro }) {
             <strong>Páginas:</strong> {livro.paginas}
           </p>
           <p className="text-rich-black">
-            <strong>Quantidade Disponível:</strong> {livro.quantidade}
+            <strong>Quantidade Disponível:</strong>{" "}
+            {livro.quantidade_disponivel}
+          </p>
+          <p className="text-rich-black">
+            <strong>Preço(Aluguel):</strong> {livro.preco}
           </p>
 
           {/* Lista de Categorias */}
           <p className="text-rich-black">
-            <strong>Categorias:</strong> {livro.categorias.join(", ")}
+            <strong>Categorias:</strong>{" "}
+            {Array.isArray(livro.categoria) ? livro.categoria.join(", ") : ""}
           </p>
         </div>
       </div>

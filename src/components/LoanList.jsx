@@ -18,16 +18,17 @@ function LoanList({ loans }) {
       </div>
 
       {/* Lista de empréstimos */}
+      {console.log(loans)}
       <div className="flex flex-col space-y-4">
         {loans.length > 0 ? (
           loans.map((loan) => (
             <LoanCard
-              key={loan.id}
-              id={loan.id}
-              book={loan.book}
-              library={loan.library}
-              loanDate={loan.loanDate}
-              returnDate={loan.returnDate}
+              key={loan.emprestimo_id}
+              id={loan.emprestimo_id}
+              book={loan.livro}
+              library={loan.biblioteca}
+              loanDate={loan.emprestimo}
+              returnDate={loan.devolucao}
             />
           ))
         ) : (
