@@ -36,25 +36,28 @@ function CardLoginAdmin() {
         <label className="text-2xl">Usuário</label>
         <input
           type="text"
-          className="bg-white rounded-lg block w-full border border-black"
+          className="bg-white p-2 rounded-lg block w-full border border-black"
           value={userLogin}
           onChange={(e) => setuserLogin(e.target.value)}
         />
         <label className="text-2xl">Senha</label>
         <input
           type="password"
-          className="bg-white rounded-lg block w-full border border-black"
+          className="bg-white p-2 rounded-lg block w-full border border-black"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         <div className="flex items-center justify-between mt-6">
           <Link to="/registerAdmin">
-            <button type="button" className="underline text-sm">
+            <button
+              type="button"
+              className="underline font-publicSans  text-sm"
+            >
               Não possuo cadastro
             </button>
           </Link>
-          <button type="button" className="underline text-sm">
+          <button type="button" className="underline font-publicSans text-sm">
             Preciso de ajuda
           </button>
         </div>

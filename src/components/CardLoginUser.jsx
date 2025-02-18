@@ -46,22 +46,27 @@ function CardLoginUser() {
         <label className="text-2xl">CPF</label>
         <input
           type="text"
-          className="bg-white rounded-lg block w-full border border-black"
+          className="bg-white rounded-lg p-2 block w-full border border-black"
           value={cpfUser}
           onChange={(e) => setCpfUser(e.target.value)}
         />
         <label className="text-2xl">Senha</label>
         <input
           type="password"
-          className="bg-white rounded-lg block w-full border border-black"
+          className="bg-white rounded-lg p-2 block w-full border border-black"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="flex items-center justify-between mt-6">
-          <Link to="/registerUser" className="underline text-sm">
+          <Link
+            to="/registerUser"
+            className="underline text-sm font-publicSans"
+          >
             Não possuo cadastro
           </Link>
-          <button className="underline text-sm">Preciso de ajuda</button>
+          <button className="underline text-sm font-publicSans">
+            Preciso de ajuda
+          </button>
         </div>
       </form>
 
