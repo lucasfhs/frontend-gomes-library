@@ -12,6 +12,7 @@ import RegisterUser from "./pages/RegisterUser.jsx";
 import RegisterAdmin from "./pages/RegisterAdmin.jsx";
 import UserMainPage from "./pages/UserMainPage.jsx";
 import BibliotecaPage from "./components/BibliotecaPage.jsx";
+import AdminReportPage from "./components/AdminReportPage.jsx";
 import UserLoanHistory from "./pages/UserLoanHistory.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
 import AdminPageLivro from "./components/AdminPageLivro.jsx";
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "loan", element: <AdminPageEmprestimo /> },
       { path: "library", element: <AdminBibliotecaPage /> },
       { path: "book-library", element: <AdminLivroBibliotecaPage /> },
+      { path: "report", element: <AdminReportPage /> },
     ],
   },
   {

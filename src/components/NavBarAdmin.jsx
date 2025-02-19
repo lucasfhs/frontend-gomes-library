@@ -59,6 +59,12 @@ function NavBarAdmin() {
         >
           Livro em Dada Biblioteca
         </Link>
+        <Link
+          to="/admin/report"
+          className="block w-full md:w-auto text-left md:text-center hover:underline"
+        >
+          Relatórios
+        </Link>
       </div>
 
       {/* Usuário e Logout */}
